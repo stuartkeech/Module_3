@@ -1,6 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<%
+request.setAttribute("policylist", (String[])session.getAttribute("policies"));
+%>
 <t:genericpage>
 	<head>
 		<link rel="stylesheet" href="initiateClaim.css">
@@ -18,14 +23,15 @@
 				Select Policy
 			</label>
    			<select id="policyName">
-   			
-   				<!-- Use ajax to make asynchronous request to populate option -->
-   				<option value="Policy1">
-   					Policy 1
-   				</option>
-   				<option value="Policy2">
-   					Policy 2
-   				</option>
+   			<!-- Use ajax to make asynchronous request to populate option -->
+   				<c:if test="${policylist}">
+   					<option val="null">null</option>
+   				</c:if>
+   				<c:if test="${policylist}">
+	   				<c:forEach var="pol" items="${policylist}">
+	   					<option value=pol>${pol}</option>
+	   				</c:forEach>   				
+   				</c:if>
    			</select>
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
@@ -50,27 +56,38 @@
     			</select>
     		</div>
     		
-    		<div id="deathCertificateDiv">
-    			<label for="deathCertificate">
-    				Upload Death Certificate
-    			</label>
-    			<input type="file" id="deathCertificate" accept="image/*">
-    		</div>
-    		
-    		<div id="checkDate">
-    			
-    		</div>
-    		
-    		<div id="claimExplanationDiv">
-    			<label for="claimExplanation">
-    				Please enter the reason for Intermittent Claim
-    			</label> <br>
+    		<!-- This part is added to make the reason for claim dynamic -->
+    		<!-- Created by Chin Han Chen on 2018/08/20 -->
+    		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    		<script>
+			$(function() {
+		        $('#claimReason').change(function(){
+		            $('.reason').hide();
+		            $('#' + $(this).val()).show();
+		        });
+		    });
+			</script>
+    		<div id="policyholderDeath" class="reason" style="display:none">
+		    		<label for="deathCertificate">
+		    			Upload Death Certificate
+		    		</label>
+		    	<input type="file" id="deathCertificate" accept="image/*">
+		    </div>
+		    		
+		    <div id="maturedPolicy" class="reason" style="display:none">
+		    			
+		    </div>
+		    		
+		    <div id="intermittentClaim" class="reason" style="display:none">
+		    		<label for="claimExplanation">
+		    			Please enter the reason for Intermittent Claim
+		    		</label> <br>
 				<textarea id="claimExplanation"  rows=5></textarea>
-    		</div>
-    		
-    		<div id="initiateClaimSubmit">
-    			<input type="submit" id="submitClaim" value="Submit Claim">
-    		</div>
+		    </div>
+		    		
+		    <div id="initiateClaimSubmit">
+		    	<input type="submit" id="submitClaim" value="Submit Claim">
+		    </div>
 	    </form>
 	</div>
     <div class="overlay"></div>
