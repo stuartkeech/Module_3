@@ -37,7 +37,7 @@
             <ul class="list-unstyled components">
             	<%if(role == null) {%>
 	                <li>
-	                    <a href="login.jsp" >Login</a>
+	                    <a href="Login.jsp" >Login</a>
 	                </li>                
 	            <%}else{%>
 	            	<li>
