@@ -1,1 +1,2 @@
-/claims2/
+build/*
+!build/build.xml
