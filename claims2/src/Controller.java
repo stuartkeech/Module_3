@@ -85,5 +85,36 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("Home.jsp");
 			}
 		}
+
+		// module for inserting reason for rejection into PolicyMap Table 
+ 		// created by Chin Han Chen on 2018/08/16
+ 		if(/*Condition where leads you to submit claim*/) {
+ 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+ 				DB.createConnection();
+ 				DB.inputRejectionReason(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
+ 				DB.inputRejectionStatus(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
+ 				DB.destroyConnection();
+ 			}else {
+ 				request.setAttribute("fail", "fail");
+ 				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
+ 				dis1.include(request, response);
+ 			}
+ 		}
+ 		
+ 		// module for confirming claim person and policy owner are the same
+ 		// created by Chin Han Chen on 2018/08/16
+ 		if(/*Condition where leads you to confirming Claim Person and Policy Owner*/) {
+ 			DB.createConnection();
+ 			if(DB.checkOwner(request.getParameter("cusID"),/*request policy map id*/)) {
+ 				DB.destroyConnection();
+ 				/*forward to whatever place comes after successful validation...*/
+ 			}else {
+ 				DB.destroyConnection();
+ 				request.setAttribute("fail", "fail");
+ 				RequestDispatcher dis2 = request.getRequestDispatcher("/CheckClaimer.jsp");
+ 				dis2.include(request, response);
+ 			}
+ 		}
+		
 	}
 }
