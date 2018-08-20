@@ -68,12 +68,9 @@
                         <span>Menu</span>
                     </button>
 					
-					<h2 id="title">Title</h2>
+					<h2 id="title">Fast Track Policy & Claim Service</h2>
 
                     <div id="title-info">
-                    	<p id="username">
-						username
-                    	</p>
 						<p id="role">
 						<%if(role !=null){%>
 							<%=role.toUpperCase()%>
@@ -81,7 +78,6 @@
 							<%="Not logged in"%>
 						<%}%>
 						</p>
-						<p id="dateTime">Date & Time</p>
                     </div>
                 </div>
             </nav>
