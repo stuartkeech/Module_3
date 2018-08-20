@@ -1,4 +1,4 @@
-package com;
+package main;
 
 public class PolicyMap {
 	private int policy_map_id;
