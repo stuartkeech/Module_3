@@ -1,4 +1,4 @@
-package com;
+package src.com;
 
 public class Customer {
 	private int customer_ID;

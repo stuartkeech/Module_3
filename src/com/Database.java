@@ -1,4 +1,4 @@
-package com;
+package src.com;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.Blob;

@@ -1,5 +1,5 @@
 /**
- * Validates input from intiate claim form
+ * Validates input from initiate claim form
  * @Chin Han Chen
  * @1.0.0
  * @Validation
@@ -8,7 +8,7 @@
  * @Reviewed by Chin Han Chen & pending
  */
 
-package com;
+package src.com;
 import java.io.*;
 import javax.imageio.*;
 import java.util.Date;
