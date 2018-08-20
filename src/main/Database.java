@@ -14,7 +14,7 @@ import java.util.List;
 //In our case, we need to change sql to whatever we want to query
 
 public class Database {
-    private String databaseURL = "jdbc:oracle:thin:@10.101.1.152:1521:xe";
+    private String databaseURL = "jdbc:oracle:thin:@10.101.1.122:1521:xe";
     private String user = "system";
     private String password = "tcs12345";
     private Connection connection;	
@@ -39,13 +39,33 @@ public class Database {
 			e2.printStackTrace();
 		}
     }
+    
+  //created by Stuart 8/20/2018 10:27
+    public double getManPower(int ID) {
+    	PreparedStatement statement=null;
+    	ResultSet result=null;
+    	double out=-1;
+    	try {
+			statement=connection.prepareStatement("Select maximum_claim_approval_amount from designations where designation_id="
+					+ "(select designation_id from managers where manager_id=?)");
+			statement.setInt(1,ID);
+			result=statement.executeQuery();
+			result.next();
+			try {
+				out=result.getDouble(1);
+			}catch(NullPointerException e) {
+				//do nothing out will stay -1
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return out;
+    }
     //created by stuart 8/16/2018 3:34
 //updated by pankti 8/17/2018 3:34
-
-
-//getPolicy gets all the policy that are approved
-
-
+//getPolicy gets all the policy that have the specified approval
     public String[][] getPolicies(Integer aproved){
     	ArrayList<String[]> output=new ArrayList<String[]>();
     	PreparedStatement statement=null;
@@ -156,7 +176,7 @@ public Customer getCustomerByCustomerId(int customer_id) {
 		return customer;
 	}
     //created by stuart 8/16/2018 2:45
-    public String[][] getClaims(Integer aproved,int sum){
+    public String[][] getClaims(Integer aproved,double sum){
     	ArrayList<String[]> output=new ArrayList<String[]>();
     	PreparedStatement statement=null;
     	ResultSet result=null;
