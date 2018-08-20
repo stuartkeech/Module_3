@@ -1,4 +1,5 @@
 <%@tag description="Overall Page template" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
@@ -21,6 +22,8 @@
 </head>	
 <body>
     <div class="wrapper">
+    <% String role = (String)session.getAttribute("role");  %>
+    
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div id="dismiss">
@@ -32,12 +35,26 @@
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#" >Navigation 1</a>
-                </li>
-                <li>
-                    <a href="#" >Navigation 2</a>
-                </li>
+            	<%if(role == null) {%>
+	                <li>
+	                    <a href="login.jsp" >Login</a>
+	                </li>                
+	            <%}else{%>
+	            	<li>
+	            		<a href="initiateClaim.jsp">Initiate Claim</a><br>
+	            	</li>
+		            <%if(role.toLowerCase().equals("admin") || role.toLowerCase().equals("manager")) {%>
+		                <li>
+							<a href="RegularClosing.jsp">Regular Policy Closing</a>
+		                </li>	            
+		                <li>
+		                	<a hef="IntermitentClosing.jsp">Intermitent Policy Closing</a>
+		                </li>
+		                <li>
+		                	<a href="PolicyAproval.jsp">Review Policies</a>
+		                </li>
+		            <%}%>
+		         <%}%>
             </ul>
         </nav>
 
@@ -54,8 +71,16 @@
 					<h2 id="title">Title</h2>
 
                     <div id="title-info">
-						<p id="username">UserName</p>
-						<p id="role">Role</p>
+                    	<p id="username">
+						username
+                    	</p>
+						<p id="role">
+						<%if(role !=null){%>
+							<%=role.toUpperCase()%>
+						<%} else {%>
+							<%="Not logged in"%>
+						<%}%>
+						</p>
 						<p id="dateTime">Date & Time</p>
                     </div>
                 </div>
