@@ -1,4 +1,4 @@
-package com;
+package main;
 
 public class Policy {
 	private int policy_id;
