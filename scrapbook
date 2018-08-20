@@ -1,0 +1,6 @@
+select * from claims;
+select * from Designations;
+select * from MANAGERS;
+select * from POLICYMAP;
+select * from Policies
+update policies set sum_assured=2000000 where policy_id=2;

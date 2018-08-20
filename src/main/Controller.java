@@ -14,18 +14,21 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession s=request.getSession();
-		s.setAttribute("managerPower",-1);
+		if(s.getAttribute("id")==null)s.setAttribute("id",1);
+		db.createConnection();
+		s.setAttribute("managerPower",db.getManPower((int)s.getAttribute("id")));
+		db.destroyConnection();
 		String url=request.getHeader("referer");
 		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));		
 		if(ref.equals("RegularClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(null,(int)s.getAttribute("managerPower")));
+				s.setAttribute("claims",db.getClaims(null,(double)s.getAttribute("managerPower")));
 				db.destroyConnection();
 				response.sendRedirect("PolicyClosing.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(1,(int)s.getAttribute("managerPower")));
+				s.setAttribute("claims",db.getClaims(1,-1));
 				db.destroyConnection();
 				response.sendRedirect("PolicyClosing.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
@@ -37,17 +40,17 @@ public class Controller extends HttpServlet {
 		}else if(ref.equals("IntermitentClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(null,(int)s.getAttribute("managerPower")));
+				s.setAttribute("claims",db.getClaims(null,(double)s.getAttribute("managerPower")));
 				db.destroyConnection();
 				response.sendRedirect("PolicyClosing.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(1,(int)s.getAttribute("managerPower")));
+				s.setAttribute("claims",db.getClaims(1,-1));
 				db.destroyConnection();
 				response.sendRedirect("PolicyClosing.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(0,(int)s.getAttribute("managerPower")));
+				s.setAttribute("claims",db.getClaims(0,-1));
 				db.destroyConnection();
 				response.sendRedirect("PolicyClosing.jsp");
 			}
