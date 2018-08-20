@@ -1,3 +1,4 @@
+package com;
 
 
 import java.io.IOException;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {	
@@ -16,8 +18,49 @@ public class Controller extends HttpServlet {
 		HttpSession s=request.getSession();
 		s.setAttribute("managerPower",-1);
 		String url=request.getHeader("referer");
-		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));		
-		if(ref.equals("RegularClosing")) {
+		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));
+		if(ref.equals("initiateClaim")) {
+			int polMid = Integer.parseInt(db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString()));
+			int manid = -1;
+			if(request.getParameter("claimReason").equals("policyholderDeath")) {
+				// success
+	 			db.createConnection();
+	 			if(Validation.checkImage(request.getParameter("request for death certificate form name"))) {
+	 				Part filePart = request.getPart("image");
+	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), null, filePart);
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			}else {
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 			}
+	 			db.destroyConnection();
+			}else if(request.getParameter("claimReason").equals("maturedPolicy")) {
+				// success
+	 			db.createConnection();
+	 			if(db.checkDate("request for Policy Map ID ")) {
+	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), null, null);
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			}else {
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 			}
+	 			db.destroyConnection();
+			}else if(request.getParameter("claimReason").equals("intermittentClaim")) {
+				// success
+	 			db.createConnection();
+	 			if(Validation.checkInjection("request for textArea form name")) {
+	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), request.getParameter("textArea name"), null);
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			}else {
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 			}
+	 			db.destroyConnection();
+			}
+		}else if(ref.equals("RegularClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(null,(int)s.getAttribute("managerPower")));
@@ -72,7 +115,14 @@ public class Controller extends HttpServlet {
 			String button = request.getParameter("loginButton");			
 			if(button.equals("Login as Policy Holder")) {
 				s.setAttribute("role", "policyHolder");
-				s.setAttribute("id", 1);
+				s.setAttribute("id", 2);
+				try {
+					db.createConnection();
+					s.setAttribute("policies", db.getPolicyId(s.getAttribute("id").toString()));
+					db.destroyConnection();
+				}catch(Exception e) {
+					s.setAttribute("policies", null);
+				}
 				response.sendRedirect("Home.jsp");				
 			}else if(button.equals("Login as Manager")) {
 				s.setAttribute("role", "manager");
@@ -85,36 +135,5 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("Home.jsp");
 			}
 		}
-
-		// module for inserting reason for rejection into PolicyMap Table 
- 		// created by Chin Han Chen on 2018/08/16
- 		if(/*Condition where leads you to submit claim*/) {
- 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
- 				DB.createConnection();
- 				DB.inputRejectionReason(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
- 				DB.inputRejectionStatus(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
- 				DB.destroyConnection();
- 			}else {
- 				request.setAttribute("fail", "fail");
- 				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
- 				dis1.include(request, response);
- 			}
- 		}
- 		
- 		// module for confirming claim person and policy owner are the same
- 		// created by Chin Han Chen on 2018/08/16
- 		if(/*Condition where leads you to confirming Claim Person and Policy Owner*/) {
- 			DB.createConnection();
- 			if(DB.checkOwner(request.getParameter("cusID"),/*request policy map id*/)) {
- 				DB.destroyConnection();
- 				/*forward to whatever place comes after successful validation...*/
- 			}else {
- 				DB.destroyConnection();
- 				request.setAttribute("fail", "fail");
- 				RequestDispatcher dis2 = request.getRequestDispatcher("/CheckClaimer.jsp");
- 				dis2.include(request, response);
- 			}
- 		}
-		
 	}
 }
