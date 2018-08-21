@@ -22,7 +22,9 @@ public class Controller extends HttpServlet {
 		s.setAttribute("managerPower",db.getManPower((int)s.getAttribute("id")));
 		db.destroyConnection();
 		String url=request.getHeader("referer");
-		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));
+		String ref;
+		if(url.contains("jsp"))ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));
+		else ref="Login";
 		System.out.println(ref);
 		String from = request.getParameter("hidden");
 		System.out.println(" from: "+from);
