@@ -15,8 +15,7 @@
 	Claim specificClaim = (Claim) session.getAttribute("specificClaim");
 	Customer specificCustomer = (Customer) session.getAttribute("specificCustomer");
 	Policy specificPolicy = (Policy) session.getAttribute("specificPolicy");
-	PolicyMap specificPolicyMap = (PolicyMap) session.getAttribute("specificPolicyMap");
-	session.setAttribute("specificClaimId", specificClaim.getClaimId());
+	PolicyMap specificPolicyMap = (PolicyMap) session.getAttribute("specificPolicyMap");	
 	%>
 	<header>
 		<h1>Claim with ID <% out.print(specificClaim.getClaimId()); %></h1>

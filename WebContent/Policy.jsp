@@ -13,8 +13,7 @@
 	<%
 	Customer specificCustomer = (Customer) session.getAttribute("specificCustomer");
 	Policy specificPolicy = (Policy) session.getAttribute("specificPolicy");
-	PolicyMap specificPolicyMap = (PolicyMap) session.getAttribute("specificPolicyMap");
-	session.setAttribute("specificPolicyMapId", specificPolicyMap.getPolicyMapId());
+	PolicyMap specificPolicyMap = (PolicyMap) session.getAttribute("specificPolicyMap");	
 	%>
 	<header>
 		<h1><% out.print(specificPolicy.getPolicyName()); %></h1>
