@@ -1,5 +1,11 @@
 package main;
 
+/**
+ * Plain old Java object for Customer
+ * @author Felix
+ * @created 08/16/2018
+ */
+
 public class Customer {
 	private int customer_ID;
 	private String firstname;

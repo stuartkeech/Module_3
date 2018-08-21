@@ -1,5 +1,11 @@
 package main;
 
+/**
+ * Plain old Java object for PolicyMap
+ * @author Felix
+ * @created 08/16/2018
+ */
+
 public class PolicyMap {
 	private int policy_map_id;
 	private int customer_ID;
@@ -9,6 +15,8 @@ public class PolicyMap {
 	private int payments_per_year;
 	private double premium_amount;
 	private String medical_details;
+	private int is_active;
+	private int approved;
 	
 	PolicyMap(int policy_map_id, int customer_ID, int policy_ID, int agent_ID, String start_date, int payments_per_year, double premium_amount, String medical_details) {
 		this.policy_map_id = policy_map_id;
@@ -53,6 +61,14 @@ public class PolicyMap {
 		return this.medical_details;
 	}
 	
+	public int getIsActive() {
+		return this.is_active;
+	}
+	
+	public int getApproved() {
+		return this.approved;
+	}
+	
 	public void setPolicyMapId(int policy_map_id) {
 		this.policy_map_id = policy_map_id;
 	}
@@ -83,5 +99,13 @@ public class PolicyMap {
 	
 	public void setMedicalDetails(String medical_details) {
 		this.medical_details = medical_details;
+	}
+	
+	public void setIsActive(int is_active) {
+		this.is_active = is_active;
+	}
+	
+	public void setApproved(int approved) {
+		this.approved = approved;
 	}
 }

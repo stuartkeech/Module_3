@@ -61,6 +61,7 @@ public class Database {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	if(out==0)return -1;
     	return out;
     }
     //created by stuart 8/16/2018 3:34
@@ -112,69 +113,9 @@ public class Database {
     	}
     	return outputA;
     }
-// Created by Felix on Thursday August 16, 2018
-// Updated by Pankti on Friday  8/17/2018
-public Policy getPolicyByPolicyId(int policy_ID) {
-		Policy policy = null;
-		PreparedStatement statement = null;
-		ResultSet result = null;
-		
-		try {
-			String query = "SELECT * FROM Policies WHERE policy_ID = ?";
-			statement = connection.prepareStatement(query);
-			statement.setInt(1, policy_ID);
-			result = statement.executeQuery();
-			result.next();
-			policy = new Policy(result.getInt("policy_id"),result.getString("policy_type"),result.getString("policy_name"),result.getInt("number_nominees"),result.getDouble("tenure"),result.getString("pre_reqs"));
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return policy;
-	}
 
 
 
-public PolicyMap getPolicyMapByPolicyMapId(int policy_map_id) {
-		PolicyMap policyMap = null;
-		PreparedStatement statement = null;
-		ResultSet result = null;
-		
-		try {
-			String query = "SELECT * FROM PolicyMap WHERE policy_map_id = ?";
-			statement = connection.prepareStatement(query);
-			statement.setInt(1, policy_map_id);
-			result = statement.executeQuery();
-			result.next();
-			policyMap = new PolicyMap(result.getInt("policy_map_id"), result.getInt("customer_ID"), result.getInt("policy_ID"), result.getInt("agent_ID"), result.getString("start_date"), result.getInt("payments_per_year"), result.getDouble("premium_amount"), result.getString("medical_details"));
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return policyMap;
-	}
-	
-public Customer getCustomerByCustomerId(int customer_id) {
-		Customer customer = null;
-		PreparedStatement statement = null;
-		ResultSet result = null;
-		
-		try {
-			String query = "SELECT * FROM Customers WHERE customer_ID = ?";
-			statement = connection.prepareStatement(query);
-			statement.setInt(1, customer_id);
-			result = statement.executeQuery();
-			result.next();
-			customer = new Customer(result.getInt("customer_ID"), result.getString("firstname"), result.getString("middlename"), result.getString("lastname"), result.getString("DOB"), result.getString("gender"), result.getString("occupation"), result.getDouble("salary"), result.getString("marital_status"), result.getInt("number_children"), result.getString("SIN"));
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return customer;
-	}
     //created by stuart 8/16/2018 2:45
     public String[][] getClaims(Integer aproved,double sum){
     	ArrayList<String[]> output=new ArrayList<String[]>();
@@ -222,5 +163,169 @@ public Customer getCustomerByCustomerId(int customer_id) {
     	}
     	return outputA;
     }
+    /**
+	 * @author Felix
+	 * @created 08/20/2018
+	 * @param claim_id
+	 * @return Claim
+	 */
+    public Claim getClaimByClaimId(int claim_id) {
+    	Claim claim = null;
+    	PreparedStatement statement = null;
+    	ResultSet result = null;
+    	
+    	try {
+    		String query = "SELECT * FROM Claims WHERE claim_id = ?";
+    		statement = connection.prepareStatement(query);
+    		statement.setInt(1, claim_id);
+    		result = statement.executeQuery();
+    		result.next();
+    		claim = new Claim(result.getInt("claim_id"), result.getInt("policy_map_id"), result.getString("claim_date"), result.getInt("approved"), result.getInt("manager_id"), result.getString("reason_for_claim"), result.getString("reason_for_rejection"));
+    		
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return claim;
+    }
+	
+	/**
+	 * @author Felix
+	 * @created 08/17/2018
+	 * @param policy_id
+	 * @return Policy
+	 */
+	public Policy getPolicyByPolicyId(int policy_ID) {
+		Policy policy = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try {
+			String query = "SELECT * FROM Policies WHERE policy_ID = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, policy_ID);
+			result = statement.executeQuery();
+			result.next();
+			policy = new Policy(result.getInt("policy_id"),result.getString("policy_type"),result.getString("policy_name"),result.getInt("number_nominees"),result.getDouble("tenure"),result.getString("pre_reqs"));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return policy;
+	}
+
+	/**
+	 * @author Felix
+	 * @created 08/17/2018
+	 * @param policy_map_id
+	 * @return PolicyMap
+	 */
+	public PolicyMap getPolicyMapByPolicyMapId(int policy_map_id) {
+		PolicyMap policyMap = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try {
+			String query = "SELECT * FROM PolicyMap WHERE policy_map_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, policy_map_id);
+			result = statement.executeQuery();
+			result.next();
+			policyMap = new PolicyMap(result.getInt("policy_map_id"), result.getInt("customer_ID"), result.getInt("policy_ID"), result.getInt("agent_ID"), result.getString("start_date"), result.getInt("payments_per_year"), result.getDouble("premium_amount"), result.getString("medical_details"));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return policyMap;
+	}
+
+	/**
+	 * @author Felix
+	 * @created 08/17/2018
+	 * @param customer_id
+	 * @return Customer
+	 */
+	public Customer getCustomerByCustomerId(int customer_id) {
+		Customer customer = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try {
+			String query = "SELECT * FROM Customers WHERE customer_ID = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, customer_id);
+			result = statement.executeQuery();
+			result.next();
+			customer = new Customer(result.getInt("customer_ID"), result.getString("firstname"), result.getString("middlename"), result.getString("lastname"), result.getString("DOB"), result.getString("gender"), result.getString("occupation"), result.getDouble("salary"), result.getString("marital_status"), result.getInt("number_children"), result.getString("SIN"));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return customer;
+	}
+	
+	/**
+	 * @author Felix
+	 * @created 08/20/2018
+	 * @param claim
+	 */
+	public void confirmClaim(Claim claim) {
+		PreparedStatement statement = null;
+		
+		try {
+			String query = "UPDATE Claims SET approved = 1 WHERE claim_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, claim.getClaimId());
+			statement.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author Felix
+	 * @created 08/17/2018
+	 * @param policyMap
+	 */
+	public void confirmPolicyMap(PolicyMap policyMap) {
+		PreparedStatement statement = null;
+		
+		try {
+			String query = "UPDATE PolicyMap SET approved = 1 WHERE policy_map_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, policyMap.getPolicyMapId());
+			statement.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author Felix
+	 * @created 08/20/2018
+	 * @param text
+	 * @param policyMapId
+	 */
+	public void submitClarification(String text, int policyMapId) {
+		PreparedStatement statement = null;
+		
+		try {
+			String query = "UPDATE PolicyMap SET reason_for_rejection = ? WHERE policy_map_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setString(1, text);
+			statement.setInt(2, policyMapId);
+			statement.executeUpdate();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
    
 }

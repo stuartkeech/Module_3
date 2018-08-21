@@ -1,5 +1,11 @@
 package main;
 
+/**
+ * Plain old Java object for Policy
+ * @author Felix
+ * @created 08/16/2018
+ */
+
 public class Policy {
 	private int policy_id;
 	private String policy_type;

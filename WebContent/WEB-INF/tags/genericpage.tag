@@ -48,10 +48,10 @@
 							<a href="RegularClosing.jsp">Regular Policy Closing</a>
 		                </li>	            
 		                <li>
-		                	<a hef="IntermitentClosing.jsp">Intermitent Policy Closing</a>
+		                	<a href="IntermittentClosing.jsp">Intermittent Policy Closing</a>
 		                </li>
 		                <li>
-		                	<a href="PolicyAproval.jsp">Review Policies</a>
+		                	<a href="PolicyApproval.jsp">Review Policies</a>
 		                </li>
 		            <%}%>
 		         <%}%>
