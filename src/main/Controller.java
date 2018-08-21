@@ -25,45 +25,50 @@ public class Controller extends HttpServlet {
 		s.setAttribute("managerPower",db.getManPower((int)s.getAttribute("id")));
 		db.destroyConnection();
 		String url=request.getHeader("referer");
-		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));	
+		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));
+		
+		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
-			int polMid = Integer.parseInt(db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString()));
+			int polMid = db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString());
+			System.out.println(polMid);
 			int manid = -1;
-			if(request.getParameter("claimReason").equals("policyholderDeath")) {
+			String c_reason = request.getParameter("claimReason");
+			
+			// if the reason for claim is death of policy holder
+			if(c_reason.equals("policyholderDeath")) {
 				// success
 	 			db.createConnection();
-	 			if(Validation.checkImage(request.getParameter("request for death certificate form name"))) {
-	 				Part filePart = request.getPart("image");
-	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), null, filePart);
-	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			if(Validation.checkImage(request.getParameter("deathcert"))) {
+	 				Part filePart = request.getPart(request.getParameter("deathcert"));
+	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
+	 				response.sendRedirect("Home.jsp");
 	 			}else {
-	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
 	 			}
 	 			db.destroyConnection();
-			}else if(request.getParameter("claimReason").equals("maturedPolicy")) {
+	 			
+	 		// if the claim reason is maturing of policy
+			}else if(c_reason.equals("maturedPolicy")) {
 				// success
 	 			db.createConnection();
-	 			if(db.checkDate("request for Policy Map ID ")) {
-	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), null, null);
-	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			if(db.checkDate(Integer.toString(polMid))) {
+	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, null);
+	 				response.sendRedirect("Home.jsp");
 	 			}else {
-	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
 	 			}
 	 			db.destroyConnection();
-			}else if(request.getParameter("claimReason").equals("intermittentClaim")) {
+	 			
+	 		// if the claim reason is intermitten claims
+			}else if(c_reason.equals("intermittentClaim")) {
 				// success
 	 			db.createConnection();
-	 			if(Validation.checkInjection("request for textArea form name")) {
-	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("claim type name"), request.getParameter("textArea name"), null);
-	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("success input webpage").forward(request, response);
+	 			if(Validation.checkInjection(request.getParameter("interreason"))) {
+	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);
+	 				response.sendRedirect("Home.jsp");
 	 			}else {
 	 				// request.setAttribute("name", "value");
-	 				request.getRequestDispatcher("failure input return to claim jsp").forward(request, response);
+	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
 	 			}
 	 			db.destroyConnection();
 			}

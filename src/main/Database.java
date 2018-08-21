@@ -414,15 +414,15 @@ public Customer getCustomerByCustomerId(int customer_id) {
     
     // get all policy_map_id using customer_ID
     // created by Chin Han Chen on 2018/08/20
-    public String getPolicyMapId(String polid, String cusid){
+    public int getPolicyMapId(String polid, String cusid){
+    	int temp=0;
     	try {
     		Statement st = null;
         	ResultSet rs = null;
-        	String temp = null;
     		st = connection.createStatement();
     		rs = st.executeQuery("select policy_map_id from PolicyMap where (policy_id = "+polid+" and customer_id = "+cusid+")");
     		while(rs.next()) {
-    			temp = rs.getObject(1).toString();
+    			temp = rs.getInt(1);
     		}
     		rs.close();
     		st.close();
@@ -430,7 +430,7 @@ public Customer getCustomerByCustomerId(int customer_id) {
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
-    	return null;
+    	return(temp);
     }
     
  

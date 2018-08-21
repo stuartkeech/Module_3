@@ -11,23 +11,16 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 	</head>
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
-		<form action="Controller" id="initiateClaim">
-			<div id="customeridDiv" >
-    			<label for="customerid">
-    				Please enter Cusomter ID
-    			</label>
-    			<input type="text" id="customerid">
-    		</div>
+		<form action="Controller" id="initiateClaim" method="post">
 			<label for="policyName">
 				Select Policy
 			</label>
-   			<select id="policyName">
+   			<select name="policyName" id="policyName">
    			<!-- Use ajax to make asynchronous request to populate option -->
-   		
    				<c:choose>
 				    <c:when test="${policylist !=null}">
 				    	<c:forEach items="${policylist}" var="item">
-				        	<option <c:out value="${item}"/>><c:out value="${item}"/></option>
+				        	<option value="${item}"><c:out value="${item}"/></option>
 				        </c:forEach>
 				    </c:when>    
 				    <c:otherwise>
@@ -51,7 +44,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
     			</label>
     			
     			<!-- To detect which one is clicked use jQuery -->
-    			<select id="claimReason">
+    			<select name="claimReason" id="claimReason">
 					<option value="policyholderDeath">Death of Policy Holder</option> <!-- Ask to upload death certificate -->
 					<option value="maturedPolicy">Policy Matured or Expired</option> <!-- Check with System Date -->
 					<option value="intermittentClaim">Intermittent Claim</option> <!-- Ask for reason in text box -->
@@ -73,18 +66,18 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 		    		<label for="deathCertificate">
 		    			Upload Death Certificate
 		    		</label>
-		    	<input type="file" id="deathCertificate" accept="image/*">
+		    	<input type="file" name="deathcert" id="deathCertificate" accept="image/*">
 		    </div>
 		    		
 		    <div id="maturedPolicy" class="reason" style="display:none">
-		    			
+		    	<input type="hidden" name="maturedPolicy" value="checkdate">
 		    </div>
 		    		
 		    <div id="intermittentClaim" class="reason" style="display:none">
 		    		<label for="claimExplanation">
 		    			Please enter the reason for Intermittent Claim
 		    		</label> <br>
-				<textarea id="claimExplanation"  rows=5></textarea>
+				<textarea name="interreason" id="claimExplanation" rows=5></textarea>
 		    </div>
 		    		
 		    <div id="initiateClaimSubmit">
