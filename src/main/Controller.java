@@ -126,7 +126,7 @@ public class Controller extends HttpServlet {
 			}
 			else if(inputValue.equals("Reject")) {
 				//Redirects to Eric's rejection page
-				response.sendRedirect("");
+				response.sendRedirect("PolicyRejection.jsp");
 			}
 			else if(inputValue.equals("Clarification")) {
 				response.sendRedirect("Clarification.jsp");
@@ -176,11 +176,39 @@ public class Controller extends HttpServlet {
 			}
 			else if(inputValue.equals("Reject")) {
 				//Redirects to Eric's rejection page
-				response.sendRedirect("");
+				response.sendRedirect("ClaimRejection.jsp");
 			}
 			else if(inputValue.equals("Go back")) {
 				response.sendRedirect("PolicyClosing.jsp");
 			}
 		}
+		// module for inserting reason for rejection into PolicyMap Table 
+ 		// created by Chin Han Chen on 2018/08/16
+		else if(ref.equals("ClaimRejection")) {
+ 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+ 				db.createConnection();
+ 				db.claimRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificClaimId") + ""));
+ 				db.claimRejectionStatus(0,Integer.parseInt(s.getAttribute("specificClaimId") + ""));
+ 				db.destroyConnection();
+ 				response.sendRedirect("RegularClosing.jsp");
+ 			}else {
+ 				request.setAttribute("fail", "fail");
+ 				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
+ 				dis1.include(request, response);
+ 			}
+ 		}
+		else if(ref.equals("PolicyRejection")) {
+ 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+ 				db.createConnection();
+ 				db.policyRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
+ 				db.policyRejectionStatus(0,Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
+ 				db.destroyConnection();
+ 				response.sendRedirect("PolicyApproval.jsp");
+ 			}else {
+ 				request.setAttribute("fail", "fail");
+ 				RequestDispatcher dis1 = request.getRequestDispatcher("/PolicyRejection.jsp");
+ 				dis1.include(request, response);
+ 			}
+ 		}
 	}
 }
