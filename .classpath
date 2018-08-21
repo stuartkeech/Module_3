@@ -19,6 +19,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 0eca24c... Revert "added policy and claim rejection"
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
@@ -37,6 +40,7 @@
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
 >>>>>>> parent of 4ad910f... added policy and claim rejection
+<<<<<<< HEAD
 =======
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
@@ -45,6 +49,8 @@
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
 >>>>>>> parent of 4ad910f... added policy and claim rejection
+=======
+>>>>>>> parent of 0eca24c... Revert "added policy and claim rejection"
 	<classpathentry kind="output" path="build/classes"/>
 >>>>>>> 4ad910f1295fe24b52d265256b238018d3c6a738
 </classpath>
