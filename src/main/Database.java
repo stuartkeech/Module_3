@@ -434,7 +434,7 @@ public Customer getCustomerByCustomerId(int customer_id) {
     	return(temp);
     }
     
-    // get policy nominee id and mature date
+    // get policy mature date
     // created by Chin Han Chen on 2018/21/2018
     public String getMatureDate(String polid, String cusid) {
     	try {

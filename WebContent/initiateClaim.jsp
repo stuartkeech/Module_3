@@ -20,6 +20,8 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 		        });
 		    });
 		</script>
+		
+		
 	</head>
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
@@ -41,7 +43,9 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 				    </c:otherwise>
 				</c:choose>
    			</select>
-   
+   			
+ 			<strong>Ajax Response</strong>
+ 			<div id="testAjax"></div>
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
    			<div id="policyInfoDiv">

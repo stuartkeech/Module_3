@@ -41,34 +41,6 @@ public class Validation {
 	
 	/**
 	 * 
-	 * @param <String><The policy map id to check claim maturity>
-	 * @return <boolean><true if claim has matured, false if not>
-	 * @throws ClassNotFoundException, SQLException
-	 * @since
-	 * @see
-	 */
-	public static boolean checkDate(String polmID) throws Exception{
-		double Temp1 = 0; // the variable for tenure length
-		Date Temp2 = new Date(); // Start Date for each policy
-		String dr = "oracle.jdbc.driver.OracleDriver";
-		Class.forName(dr);
-		con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","tcs12345");
-		st = con.createStatement();
-		rs = st.executeQuery("select Policies.tenure, PolicyMap.start_date "+
-		"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID");
-		while(rs.next()) {
-			Temp1 = rs.getDouble(1);
-			Temp2 = new Date(rs.getDate(1).getTime());
-		}
-		rs.close();
-		st.close();
-		con.close();
-		LocalDate Date1 = Temp2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return(Period.between(Date1,LocalDate.now()).getYears() >= Temp1);
-	}
-	
-	/**
-	 * 
 	 * @param <String><the reason for rejecting policy>
 	 * @return <boolean><return true if no invalid characters in input, false otherwise>
 	 * @throws

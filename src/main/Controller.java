@@ -29,22 +29,23 @@ public class Controller extends HttpServlet {
 		db.destroyConnection();
 		String url=request.getHeader("referer");
 		String ref=url.substring(url.lastIndexOf("/")+1,url.lastIndexOf(".jsp"));
-		System.out.println("the requested ref value is "+ref);
+		
+		
 		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
-			// if the page is just requesting to update the policy detail
-			/*try {
-				request.setAttribute("poldetail", "");
-				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
-			}catch(Exception e) {
-				request.setAttribute("poldetail", null);
-				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
-			}*/
-			
-			System.out.println(request.getParameter("policyName")+" "+s.getAttribute("id").toString());
-			// int polMid = db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString());
+			// The block that auto updates the sites info
+			/*
+			String userName = request.getParameter("policyName");
+			if(userName == null || "".equals(userName)) {
+				response.setContentType("text/plain");
+				response.getWriter().write("");
+			}else {
+				response.setContentType("text/plain");
+				response.getWriter().write(userName);
+			}
+			*/
 			db.createConnection();
-			int polMid = db.getPolicyMapId("2", s.getAttribute("id").toString());
+			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
 			db.destroyConnection();
 			String manid = null;
 			String c_reason = request.getParameter("claimReason");
@@ -53,7 +54,6 @@ public class Controller extends HttpServlet {
 			if(c_reason.equals("policyholderDeath")) {
 				// success
 				Part filePart = request.getPart("deathcert");
-				// System.out.println(request.getParameter("deathcert"));
 	 			db.createConnection();
 	 			if(Validation.checkImage(filePart.getInputStream())) {
 	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
@@ -65,15 +65,12 @@ public class Controller extends HttpServlet {
 	 			
 	 		// if the claim reason is maturing of policy
 			}else if(c_reason.equals("maturedPolicy")) {
-				System.out.println("inside matured policy logic");
 				// success
 	 			db.createConnection();
 	 			if(db.checkDate(Integer.toString(polMid))) {
-	 				System.out.println("inside if");
 	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, null);
 	 				response.sendRedirect("Home.jsp");
 	 			}else {
-	 				System.out.println("inside else");
 	 				//request.getRequestDispatcher("/initiateClaim.jsp").forward(request, response);
 	 				response.sendRedirect("initiateClaim.jsp");
 	 			}
@@ -82,8 +79,6 @@ public class Controller extends HttpServlet {
 	 		// if the claim reason is intermitten claims
 			}else if(c_reason.equals("intermittentClaim")) {
 				// success
-				System.out.println(request.getParameter("interreason").indexOf("="));
-				System.out.println(Validation.checkInjection(request.getParameter("interreason")));
 	 			db.createConnection();
 	 			if(Validation.checkInjection(request.getParameter("interreason"))) {
 	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);
@@ -153,7 +148,6 @@ public class Controller extends HttpServlet {
 				try {
 					db.createConnection();
 					s.setAttribute("policies", db.getPolicyId(s.getAttribute("id").toString()));
-					System.out.println("the value is "+Arrays.toString((String[])s.getAttribute("policies")));
 					db.destroyConnection();
 				}catch(Exception e) {
 					s.setAttribute("policies", null);
