@@ -121,6 +121,7 @@ public class Database {
     	}
     	return outputA;
     }
+    
 // Created by Felix on Thursday August 16, 2018
 // Updated by Pankti on Friday  8/17/2018
 public Policy getPolicyByPolicyId(int policy_ID) {
@@ -244,7 +245,7 @@ public Customer getCustomerByCustomerId(int customer_id) {
     		"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID where policy_map_ID = "+polmID);
     		while(rs.next()) {
     			temp1 = rs.getDouble(1);
-    			temp2 = new Date(rs.getDate(1).getTime());
+    			temp2 = new Date(rs.getDate(2).getTime());
     		}
     		rs.close();
     		st.close();
@@ -431,6 +432,32 @@ public Customer getCustomerByCustomerId(int customer_id) {
     		e.printStackTrace();
     	}
     	return(temp);
+    }
+    
+    // get policy nominee id and mature date
+    // created by Chin Han Chen on 2018/21/2018
+    public String getMatureDate(String polid, String cusid) {
+    	try {
+    		int polMid = this.getPolicyMapId(polid, cusid);
+    		Statement st = null;
+        	ResultSet rs = null;
+    		double temp1 = 0;
+    		Date temp2 = new Date();
+    		st = connection.createStatement();
+    		rs = st.executeQuery("select Policies.tenure, PolicyMap.start_date "+
+    		"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID where policy_map_ID = "+polMid);
+    		while(rs.next()) {
+    			temp1 = rs.getDouble(1);
+    			temp2 = new Date(rs.getDate(2).getTime());
+    		}
+    		rs.close();
+    		st.close();
+    		LocalDate date1 = temp2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    		return(date1.plusYears((long)temp1).toString());
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
     }
     
  

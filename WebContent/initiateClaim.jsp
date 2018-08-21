@@ -8,6 +8,18 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 <t:genericpage>
 	<head>
 		<link rel="stylesheet" href="initiateClaim.css">
+		
+		<!-- This part is added to make the reason for claim dynamic -->
+    	<!-- Created by Chin Han Chen on 2018/08/20 -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    	<script>
+			$(function() {
+		        $('#claimReason').change(function(){
+		            $('.reason').hide();
+		            $('#' + $(this).val()).show();
+		        });
+		    });
+		</script>
 	</head>
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
@@ -21,7 +33,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 				    <c:when test="${policylist !=null}">
 				    	<option value=null>Choose Policy From Below</option>
 				    	<c:forEach items="${policylist}" var="item">
-				        	<option <c:out value="${item}" />>${item}</option>
+				        	<option <c:out value="${policies}" />>${item}</option>
 				        </c:forEach>
 				    </c:when>    
 				    <c:otherwise>
@@ -29,6 +41,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 				    </c:otherwise>
 				</c:choose>
    			</select>
+   
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
    			<div id="policyInfoDiv">
@@ -53,17 +66,6 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
     			</select>
     		</div>
     		
-    		<!-- This part is added to make the reason for claim dynamic -->
-    		<!-- Created by Chin Han Chen on 2018/08/20 -->
-    		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    		<script>
-			$(function() {
-		        $('#claimReason').change(function(){
-		            $('.reason').hide();
-		            $('#' + $(this).val()).show();
-		        });
-		    });
-			</script>
     		<div id="policyholderDeath" class="reason" style="display:none">
 		    		<label for="deathCertificate">
 		    			Upload Death Certificate
@@ -73,6 +75,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 		    		
 		    <div id="maturedPolicy" class="reason" style="display:none">
 		    	<input type="hidden" name="maturedPolicy" value="checkdate">
+		    	<b>This system will auto validate your Policy Date.</b><br>
 		    </div>
 		    		
 		    <div id="intermittentClaim" class="reason" style="display:none">

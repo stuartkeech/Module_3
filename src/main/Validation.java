@@ -38,26 +38,6 @@ public class Validation {
 			return false;
 		}
 	}
-	/*public static boolean checkImage(String inp) {
-		try {
-			ImageIO.read(new File(inp)).toString();
-			return true;
-		}catch(Exception e) {
-			return false;
-		}
-	}*/
-	
-	/*
-	public static boolean checkImage(String inp) {
-		File f = new File(inp);
-        String mimetype= new MimetypesFileTypeMap().getContentType(f);
-        String type = mimetype.split("/")[0];
-        if(type.equals("image"))
-            return true;
-        else 
-            return false;
-	}
-	*/
 	
 	/**
 	 * 
