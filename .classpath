@@ -17,12 +17,17 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 =======
 	<classpathentry kind="lib" path="C:/Users/1559925/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559925/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
+>>>>>>> parent of 4ad910f... added policy and claim rejection
 =======
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/1559846/Documents/GitHub/Module_3/WebContent/WEB-INF/lib/ojdbc6.jar"/>
