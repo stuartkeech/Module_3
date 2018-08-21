@@ -12,14 +12,16 @@ public class Policy {
 	private String policy_name;
 	private int number_nominees;
 	private double tenure;
+	private double sum_assured;
 	private String pre_reqs;
 	
-	Policy(int policy_id, String policy_type, String policy_name, int number_nominees, double tenure, String pre_reqs) {
+	Policy(int policy_id, String policy_type, String policy_name, int number_nominees, double tenure, double sum_assured, String pre_reqs) {
 		this.policy_id = policy_id;
 		this.policy_type = policy_type;
 		this.policy_name = policy_name;
 		this.number_nominees = number_nominees;
 		this.tenure = tenure;
+		this.sum_assured = sum_assured;
 		this.pre_reqs = pre_reqs;
 	}
 	
@@ -69,5 +71,13 @@ public class Policy {
 	
 	public void setPreReqs(String pre_reqs) {
 		this.pre_reqs = pre_reqs;
+	}
+
+	public double getSumAssured() {
+		return sum_assured;
+	}
+
+	public void setSumAssured(double sum_assured) {
+		this.sum_assured = sum_assured;
 	}
 }

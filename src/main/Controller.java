@@ -46,7 +46,7 @@ public class Controller extends HttpServlet {
 				db.destroyConnection();
 				response.sendRedirect("NonPendingClaims.jsp");
 			}
-		}else if(ref.equals("IntermitentClosing")) {
+		}else if(ref.equals("IntermittentClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(null,(double)s.getAttribute("managerPower")));
@@ -54,9 +54,15 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("PendingClaims.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
-				s.setAttribute("claims",db.getClaims(1,-1));
+				String[][] claimInfo=db.getClaims(1,-1);
+				int[] claimID=new int[claimInfo.length];
+				s.setAttribute("claims",claimInfo);
+				for(int i=0;i<claimInfo.length;i++) {
+					claimID[i]=Integer.parseInt(claimInfo[i][3]);
+				}
+				s.setAttribute("EA",db.getEligibleAmmount(claimID));
 				db.destroyConnection();
-				response.sendRedirect("IntermettentApprovedClaims.jsp");
+				response.sendRedirect("IntermittentApprovedClaims.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(0,-1));
@@ -96,7 +102,7 @@ public class Controller extends HttpServlet {
 				s.setAttribute("id", 1);
 				response.sendRedirect("Home.jsp");
 			}
-		}else if(ref.equals("PolicyReview")) {
+		}else if(ref.equals("PendingPolicies")) {
 			db.createConnection();
 			int policyID=Integer.parseInt(request.getParameter("info"));
 			s.setAttribute("specificPolicyMap", db.getPolicyMapByPolicyMapId(policyID));
@@ -144,7 +150,7 @@ public class Controller extends HttpServlet {
 			response.sendRedirect("PolicyApproval.jsp");
 			db.destroyConnection();
 		}
-		else if(ref.equals("PendingPolicies")) {
+		else if(ref.equals("PendingClaims")) {
 			db.createConnection();
 			int claimID=Integer.parseInt(request.getParameter("info"));
 			s.setAttribute("specificClaim", db.getClaimByClaimId(claimID));

@@ -1,5 +1,7 @@
 package main;
 
+import java.sql.Date;
+
 /**
  * Plain old Java object for PolicyMap
  * @author Felix
@@ -11,14 +13,14 @@ public class PolicyMap {
 	private int customer_ID;
 	private int policy_ID;
 	private int agent_ID;
-	private String start_date;
+	private Date start_date;
 	private int payments_per_year;
 	private double premium_amount;
 	private String medical_details;
 	private int is_active;
 	private int approved;
 	
-	PolicyMap(int policy_map_id, int customer_ID, int policy_ID, int agent_ID, String start_date, int payments_per_year, double premium_amount, String medical_details) {
+	PolicyMap(int policy_map_id, int customer_ID, int policy_ID, int agent_ID, Date start_date, int payments_per_year, double premium_amount, String medical_details) {
 		this.policy_map_id = policy_map_id;
 		this.customer_ID = customer_ID;
 		this.policy_ID = policy_ID;
@@ -45,7 +47,7 @@ public class PolicyMap {
 		return this.agent_ID;
 	}
 	
-	public String getStartDate() {
+	public Date getStartDate() {
 		return this.start_date;
 	}
 	
@@ -85,7 +87,7 @@ public class PolicyMap {
 		this.agent_ID = agent_ID;
 	}
 	
-	public void setStartDate(String start_date) {
+	public void setStartDate(Date start_date) {
 		this.start_date = start_date;
 	}
 	
