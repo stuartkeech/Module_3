@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +15,11 @@ import javax.servlet.http.Part;
 
 import main.Validation;
 
+@MultipartConfig
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {	
 	private Database db=new Database();
+	@SuppressWarnings("null")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession s=request.getSession();
@@ -29,17 +32,21 @@ public class Controller extends HttpServlet {
 		
 		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
-			int polMid = db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString());
-			System.out.println(polMid);
-			int manid = -1;
+			// System.out.println(request.getParameter("policyname")+" "+s.getAttribute("id").toString());
+			// int polMid = db.getPolicyMapId(request.getParameter("policyname"),s.getAttribute("id").toString());
+			db.createConnection();
+			int polMid = db.getPolicyMapId("2", s.getAttribute("id").toString());
+			db.destroyConnection();
+			String manid = null;
 			String c_reason = request.getParameter("claimReason");
 			
 			// if the reason for claim is death of policy holder
 			if(c_reason.equals("policyholderDeath")) {
 				// success
+				Part filePart = request.getPart("deathcert");
+				// System.out.println(request.getParameter("deathcert"));
 	 			db.createConnection();
-	 			if(Validation.checkImage(request.getParameter("deathcert"))) {
-	 				Part filePart = request.getPart(request.getParameter("deathcert"));
+	 			if(Validation.checkImage(filePart.getInputStream())) {
 	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
 	 				response.sendRedirect("Home.jsp");
 	 			}else {
@@ -62,6 +69,8 @@ public class Controller extends HttpServlet {
 	 		// if the claim reason is intermitten claims
 			}else if(c_reason.equals("intermittentClaim")) {
 				// success
+				System.out.println(request.getParameter("interreason").indexOf("="));
+				System.out.println(Validation.checkInjection(request.getParameter("interreason")));
 	 			db.createConnection();
 	 			if(Validation.checkInjection(request.getParameter("interreason"))) {
 	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);

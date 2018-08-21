@@ -14,6 +14,7 @@ import javax.imageio.*;
 import java.util.Date;
 import java.sql.*;
 import java.time.*;
+import javax.activation.MimetypesFileTypeMap;
 
 public class Validation {
 	public static Connection con = null;
@@ -28,14 +29,35 @@ public class Validation {
 	 * @since
 	 * @see
 	 */
-	public static boolean checkImage(String inp) {
+	
+	public static boolean checkImage(InputStream inp) {
+		try {
+			ImageIO.read(inp).toString();
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+	}
+	/*public static boolean checkImage(String inp) {
 		try {
 			ImageIO.read(new File(inp)).toString();
 			return true;
 		}catch(Exception e) {
 			return false;
 		}
+	}*/
+	
+	/*
+	public static boolean checkImage(String inp) {
+		File f = new File(inp);
+        String mimetype= new MimetypesFileTypeMap().getContentType(f);
+        String type = mimetype.split("/")[0];
+        if(type.equals("image"))
+            return true;
+        else 
+            return false;
 	}
+	*/
 	
 	/**
 	 * 
@@ -76,7 +98,7 @@ public class Validation {
 	public static boolean checkInjection(String inp) {
 		int One = inp.indexOf('=');
 		int Two = inp.indexOf('\"');
-		if(One > 0 || Two >0) {
+		if(One >= 0 || Two >= 0) {
 			return false;
 		}else {
 			return true;

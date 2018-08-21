@@ -11,7 +11,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 	</head>
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
-		<form action="Controller" id="initiateClaim" method="post">
+		<form action="Controller" id="initiateClaim" method="post" enctype="multipart/form-data">
 			<label for="policyName">
 				Select Policy
 			</label>
@@ -19,12 +19,13 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
    			<!-- Use ajax to make asynchronous request to populate option -->
    				<c:choose>
 				    <c:when test="${policylist !=null}">
+				    	<option value=null>Choose Policy From Below</option>
 				    	<c:forEach items="${policylist}" var="item">
-				        	<option value="${item}"><c:out value="${item}"/></option>
+				        	<option <c:out value="${item}" />>${item}</option>
 				        </c:forEach>
 				    </c:when>    
 				    <c:otherwise>
-				        <option value=null>Null</option>
+				        <option value=null>No Polices</option>
 				    </c:otherwise>
 				</c:choose>
    			</select>
@@ -45,6 +46,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
     			
     			<!-- To detect which one is clicked use jQuery -->
     			<select name="claimReason" id="claimReason">
+    				<option value=null>Choose Options Below</option>
 					<option value="policyholderDeath">Death of Policy Holder</option> <!-- Ask to upload death certificate -->
 					<option value="maturedPolicy">Policy Matured or Expired</option> <!-- Check with System Date -->
 					<option value="intermittentClaim">Intermittent Claim</option> <!-- Ask for reason in text box -->
