@@ -34,41 +34,41 @@ public class Controller extends HttpServlet {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(null,(double)s.getAttribute("managerPower")));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("PendingClaims.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(1,-1));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("NonPendingClaims.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(0,-1));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("NonPendingClaims.jsp");
 			}
 		}else if(ref.equals("IntermitentClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(null,(double)s.getAttribute("managerPower")));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("PendingClaims.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(1,-1));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("IntermettentApprovedClaims.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
 				s.setAttribute("claims",db.getClaims(0,-1));
 				db.destroyConnection();
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("NonPendingClaims.jsp");
 			}
 		}else if(ref.equals("PolicyApproval")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
 				s.setAttribute("policies",db.getPolicies(null));
 				db.destroyConnection();
-				response.sendRedirect("PolicyReview.jsp");
+				response.sendRedirect("PendingPolicies.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
 				s.setAttribute("policies",db.getPolicies(1));
@@ -78,7 +78,7 @@ public class Controller extends HttpServlet {
 				db.createConnection();
 				s.setAttribute("policies",db.getPolicies(0));
 				db.destroyConnection();
-				response.sendRedirect("PolicyReview.jsp");
+				response.sendRedirect("NonPendingPolicies.jsp");
 			}
 		}else if(ref.equals("Login")) {
 			String button = request.getParameter("loginButton");			
@@ -144,7 +144,7 @@ public class Controller extends HttpServlet {
 			response.sendRedirect("PolicyApproval.jsp");
 			db.destroyConnection();
 		}
-		else if(ref.equals("PolicyClosing")) {
+		else if(ref.equals("PendingPolicies")) {
 			db.createConnection();
 			int claimID=Integer.parseInt(request.getParameter("info"));
 			s.setAttribute("specificClaim", db.getClaimByClaimId(claimID));
@@ -179,7 +179,7 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("ClaimRejection.jsp");
 			}
 			else if(inputValue.equals("Go back")) {
-				response.sendRedirect("PolicyClosing.jsp");
+				response.sendRedirect("PendingPolicies.jsp");
 			}
 		}
 		// module for inserting reason for rejection into PolicyMap Table 
