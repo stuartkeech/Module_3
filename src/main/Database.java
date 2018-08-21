@@ -316,7 +316,7 @@ public class Database {
 		PreparedStatement statement = null;
 		
 		try {
-			String query = "UPDATE PolicyMap SET reason_for_rejection = ? WHERE policy_map_id = ?";
+			String query = "UPDATE PolicyMap SET reason_for_clarification = ? WHERE policy_map_id = ?";
 			statement = connection.prepareStatement(query);
 			statement.setString(1, text);
 			statement.setInt(2, policyMapId);

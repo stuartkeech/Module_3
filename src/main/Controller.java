@@ -176,11 +176,23 @@ public class Controller extends HttpServlet {
 			}
 			else if(inputValue.equals("Reject")) {
 				//Redirects to Eric's rejection page
-				response.sendRedirect("");
+				response.sendRedirect("ClaimRejection.jsp");
 			}
 			else if(inputValue.equals("Go back")) {
 				response.sendRedirect("PolicyClosing.jsp");
 			}
 		}
+		if(/*Condition where leads you to submit claim*/) {
+ 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+ 				db.createConnection();
+ 				db.inputRejectionReason(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
+ 				db.inputRejectionStatus(/*Confirm the PolicyMap ID*/,request.getParameter("Rejection"));
+ 				db.destroyConnection();
+ 			}else {
+ 				request.setAttribute("fail", "fail");
+ 				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
+ 				dis1.include(request, response);
+ 			}
+ 		}
 	}
 }
