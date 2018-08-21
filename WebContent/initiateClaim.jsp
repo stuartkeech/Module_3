@@ -2,7 +2,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
 <%
 request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 %>
@@ -24,14 +23,17 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 			</label>
    			<select id="policyName">
    			<!-- Use ajax to make asynchronous request to populate option -->
-   				<c:if test="${policylist}">
-   					<option val="null">null</option>
-   				</c:if>
-   				<c:if test="${policylist}">
-	   				<c:forEach var="pol" items="${policylist}">
-	   					<option value=pol>${pol}</option>
-	   				</c:forEach>   				
-   				</c:if>
+   		
+   				<c:choose>
+				    <c:when test="${policylist !=null}">
+				    	<c:forEach items="${policylist}" var="item">
+				        	<option <c:out value="${item}"/>><c:out value="${item}"/></option>
+				        </c:forEach>
+				    </c:when>    
+				    <c:otherwise>
+				        <option value=null>Null</option>
+				    </c:otherwise>
+				</c:choose>
    			</select>
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
