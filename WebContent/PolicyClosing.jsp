@@ -9,7 +9,7 @@
 <body>
 
 
-	<form action="Controller" name="policyClosings">
+	<form action="Controller" name="policyClosings" method="post">
 	<table>
 	<tr>
 		<td>
@@ -38,7 +38,7 @@
 		<%=DBout[i][2]%>
 		</td>		
 		<td>		
-		<button name="info" value="<%=Integer.parseInt(DBout[i][3])%>">More Information</button>
+		<button name="info" value="<%=DBout[i][3]%>">More Information</button>
 		</td>				
 	</tr>
 	

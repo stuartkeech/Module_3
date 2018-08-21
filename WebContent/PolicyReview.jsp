@@ -66,7 +66,7 @@
 			
 			<!-- This is where to put your main content. -->
 			<div id="main-body">
-<form action="Controller" name="policyReview">
+<form action="Controller" name="policyReview" method="post">
 	<table>
 	<tr>
 		<td>
