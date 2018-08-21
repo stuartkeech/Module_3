@@ -11,7 +11,7 @@
 		<h1>Clarification</h1>
 	</header>
 	<form action="Controller" method="POST">
-		<textarea name="clarification" placeholder="Please enter clarification here" rows="25" cols="100"></textarea>
+		<textarea name="clarification" placeholder="Please enter clarification here" rows="5" cols="50"></textarea>
 		<input type="submit" value="Submit">
 		<input type="hidden" name="hidden" value="submitClarification">
 	</form>
