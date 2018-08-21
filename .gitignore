@@ -1,3 +1,14 @@
 build/*
 !build/build.xml
 *.class
+.classpath
+build/classes/main/Controller.class
+build/classes/main/Database.class
+src/main/Controller.java
+src/main/Database.java
+src/main/Validation.java
+WebContent/Claim.jsp
+WebContent/ClaimRejection.jsp
+WebContent/Clarification.jsp
+WebContent/Policy.jsp
+WebContent/PolicyRejection.jsp
