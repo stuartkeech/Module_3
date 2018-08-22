@@ -51,9 +51,12 @@
 		                	<a href="IntermittentClosing.jsp">Intermittent Policy Closing</a>
 		                </li>
 		                <li>
-		                	<a href="PolicyApproval.jsp">Review Policies</a>
+		                	<a href="PolicyApproval.jsp">Review Policies&nbsp;&nbsp;<i class="fas fa-edit"></i></a>
 		                </li>
 		            <%}%>
+		            <li>
+		            	<a href="Login.jsp">Logout&nbsp;&nbsp;<i class="fas fa-sign-out-alt"></i></a>
+		            </li>
 		         <%}%>
             </ul>
         </nav>
