@@ -79,7 +79,7 @@ public class Controller extends HttpServlet {
 				db.createConnection();
 				s.setAttribute("policies",db.getPolicies(1));
 				db.destroyConnection();
-				response.sendRedirect("PolicyReview.jsp");
+				response.sendRedirect("NonPendingPolicies.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
 				s.setAttribute("policies",db.getPolicies(0));
@@ -138,7 +138,7 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("Clarification.jsp");
 			}
 			else if(inputValue.equals("Go back")) {
-				response.sendRedirect("PolicyReview.jsp");
+				response.sendRedirect("PendingPolicies.jsp");
 			}
 		}
 		else if(from!=null &&from.equals("submitClarification")) {
@@ -185,7 +185,7 @@ public class Controller extends HttpServlet {
 				response.sendRedirect("ClaimRejection.jsp");
 			}
 			else if(inputValue.equals("Go back")) {
-				response.sendRedirect("PendingPolicies.jsp");
+				response.sendRedirect("PendingClaims.jsp");
 			}
 		}
 		// module for inserting reason for rejection into PolicyMap Table 
