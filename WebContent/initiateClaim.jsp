@@ -1,76 +1,93 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <%
 request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 %>
-<t:genericpage>
-	<head>
-		<link rel="stylesheet" href="initiateClaim.css">
-		
-		<!-- This part is added to make the reason for claim dynamic -->
-    	<!-- Created by Chin Han Chen on 2018/08/20 -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    	<script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="https://code.jquery.com/jquery-1.10.2.js"	type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
 			$(function(){
 		        $('#claimReason').change(function(){
 		            $('.reason').hide();
 		            $('#' + $(this).val()).show();
 		        });
 		    });
-		</script>
-		
-		<!-- This part is added to make the policy info dynamic -->
-    	<!-- Created by Chin Han Chen on 2018/08/20 -->
-    	<script src="https://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
-		<script type="text/javascript">
-		$(document).ready(function() 
-			{ 
-			$('#id_trial').click(function() {
-				$.ajax({
-			        type: "POST",
-			        url:"/Module_3/Controller",
-			        data:{"CustomerID":"True"},
-			        dataType: "json",
-			        success: function (data) {
-			            $.each(data.polData,function(i,obj)
-			            {
-			             var div_data="<option value="+obj.policyID+">"+obj.policyNM+"</option>";
-			            $(div_data).appendTo('#policyName'); 
-			            });  
-			            },
-			            error: function(xhr, status, error) {
-			                // check status && error
-			                alert(error);
-			             },
-			      });
-			    });
-			});
-		</script>
-	</head>
-	
-	<!-- This is where to put your main content. -->
-	<div id="main-body">
+</script>
+
+<script type="text/javascript">
+var a = null;
+$(document).ready(function() 
+{ 
+
+$.ajax({
+    type: "get",
+    url:"Controller",
+    dataType: "json",
+    data:{"CustomerID":"True"},
+    dataType: "json",
+    success: function (data) {
+    	$("#policyName").append('<option>Select policy from below</option>');
+    	a = data.polData;
+        $.each(data.polData,function(i,obj)
+        {
+         var div_data="<option value="+obj.policyID+">"+obj.policyNM+"</option>";
+        $(div_data).appendTo('#policyName'); 
+        });  
+        },
+        error: function(xhr, status, error) {
+            // check status && error
+            alert(error);
+         },
+  });
+});
+
+$(function(){
+    $('#policyName').change(function(){
+    	console.log(a);
+    	$.each(a,function(i,obj)
+            {
+    		if($('#policyName').val() == String(obj.policyID)){
+        		$('#nominee').val(obj.Nominee);
+        		$('#matureDate').val(obj.MatureDate);
+        	}
+            })
+    	
+    });
+});
+</script>
+
+<link rel="stylesheet" href="initiateClaim.css">
+</head>
+<body>
+
+<br><br><br><br><br>
+<div id="main-body">
 		<form action="Controller" id="initiateClaim" method="post" enctype="multipart/form-data">
 			<label for="policyName">
 				Select Policy
 			</label>
    			<select name="policyName" id="policyName">
-   				<option>Please Choose From Below Options</option>
    			</select>
-   			<input type="button" id="id_trial" name="btn_trial" value="Trial Button..">
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
-   			<div id="policyInfoDiv">
+   			<div id="NoomineeInfoDiv">
     			<label for="nominee">
     				Nominee
     			</label>
    				<input type="text" id="nominee" value="" readonly>
+   			</div>
+   			<div id="maturedate">
     			<label for="matureDate">
     				Matured Date
     			</label>
     			<input type="text" id="matureDate" value="" readonly>
+    		</div>
+    		
     			<label for="claimReason">
     				Reason for Claim
     			</label>
@@ -82,7 +99,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 					<option value="maturedPolicy">Policy Matured or Expired</option> <!-- Check with System Date -->
 					<option value="intermittentClaim">Intermittent Claim</option> <!-- Ask for reason in text box -->
     			</select>
-    		</div>
+    		
     		
     		<div id="policyholderDeath" class="reason" style="display:none">
 		    		<label for="deathCertificate">
@@ -109,4 +126,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 	    </form>
 	</div>
     <div class="overlay"></div>
-</t:genericpage>		
+
+
+</body>
+</html>

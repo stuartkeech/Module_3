@@ -20,6 +20,20 @@ import main.Validation;
 public class Controller extends HttpServlet {	
 	private Database db=new Database();
 	@SuppressWarnings("null")
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// The block that auto updates the sites info
+		HttpSession s=request.getSession();
+					String userName = request.getParameter("CustomerID");
+					if(userName == null || !"True".equals(userName)) {
+						response.setContentType("text/plain");
+						response.getWriter().write("");
+					}else {
+						response.setContentType("application/Json");
+						db.createConnection();
+						response.getWriter().write(db.getInfoJson(s.getAttribute("id").toString()));
+						db.destroyConnection();
+					}
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession s=request.getSession();
@@ -33,21 +47,6 @@ public class Controller extends HttpServlet {
 		
 		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
-			
-			// The block that auto updates the sites info
-			String userName = request.getParameter("CustomerID");
-			if(userName == null || !"True".equals(userName)) {
-				System.out.println("there is something here!!");
-				response.setContentType("text/plain");
-				response.getWriter().write("");
-			}else {
-				System.out.println("there is something here!!");
-				response.setContentType("application/Json");
-				db.createConnection();
-				response.getWriter().write(db.getInfoJson(s.getAttribute("id").toString()));
-				db.destroyConnection();
-			}
-			
 			
 			db.createConnection();
 			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
@@ -149,7 +148,7 @@ public class Controller extends HttpServlet {
 			String button = request.getParameter("loginButton");			
 			if(button.equals("Login as Policy Holder")) {
 				s.setAttribute("role", "policyHolder");
-				s.setAttribute("id", 2);
+				s.setAttribute("id", 3);
 				try {
 					db.createConnection();
 					s.setAttribute("policies", db.getPolicyId(s.getAttribute("id").toString()));
@@ -158,7 +157,6 @@ public class Controller extends HttpServlet {
 					s.setAttribute("policies", null);
 				}
 				db.createConnection();
-				System.out.println(db.getInfoJson(s.getAttribute("id").toString()));
 				db.destroyConnection();
 				response.sendRedirect("Home.jsp");				
 			}else if(button.equals("Login as Manager")) {
