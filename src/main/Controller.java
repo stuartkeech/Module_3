@@ -48,6 +48,7 @@ public class Controller extends HttpServlet {
 		System.out.println(ref);
 		String from = request.getParameter("hidden");
 		System.out.println(" from: "+from);
+		
 		if(ref.equals("RegularClosing")) {
 			if(request.getParameter("info").equals("Pending")) {
 				System.out.println(s.getAttribute("managerPower"));
@@ -236,51 +237,48 @@ public class Controller extends HttpServlet {
 				dis1.include(request, response);
 			}
 		}else if(ref.equals("initiateClaim")) {
-
-			db.createConnection();
-			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
-			db.destroyConnection();
+			int polMid = Integer.parseInt(request.getParameter("policyName"));
 			String manid = null;
 			String c_reason = request.getParameter("claimReason");
-
 			// if the reason for claim is death of policy holder
 			if(c_reason.equals("policyholderDeath")) {
 				// success
 				Part filePart = request.getPart("deathcert");
-				db.createConnection();
-				if(Validation.checkImage(filePart.getInputStream())) {
-					db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
-					response.sendRedirect("Home.jsp");
-				}else {
-					request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
-				}
-				db.destroyConnection();
-
-				// if the claim reason is maturing of policy
+	 			db.createConnection();
+	 			if(Validation.checkImage(filePart.getInputStream())) {
+	 				db.inputData(polMid,new java.util.Date(),manid, null, filePart);
+	 				response.sendRedirect("Home.jsp");
+	 			}else {
+	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
+	 			}
+	 			db.destroyConnection();
+	 			
+	 		// if the claim reason is maturing of policy
 			}else if(c_reason.equals("maturedPolicy")) {
 				// success
-				db.createConnection();
-				if(db.checkDate(Integer.toString(polMid))) {
-					db.inputData(polMid,new java.util.Date(),manid, c_reason, null, null);
-					response.sendRedirect("Home.jsp");
-				}else {
-					//request.getRequestDispatcher("/initiateClaim.jsp").forward(request, response);
-					response.sendRedirect("initiateClaim.jsp");
-				}
-				db.destroyConnection();
-
-				// if the claim reason is intermitten claims
+	 			db.createConnection();
+	 			if(db.checkDate(Integer.toString(polMid))) {
+	 				db.inputData(polMid,new java.util.Date(),manid, null, null);
+	 				response.sendRedirect("Home.jsp");
+	 			}else {
+	 				//request.getRequestDispatcher("/initiateClaim.jsp").forward(request, response);
+	 				s.setAttribute("fail", "fail");
+	 				response.sendRedirect("initiateClaim.jsp");
+	 			}
+	 			db.destroyConnection();
+	 			
+	 		// if the claim reason is intermitten claims
 			}else if(c_reason.equals("intermittentClaim")) {
 				// success
-				db.createConnection();
-				if(Validation.checkInjection(request.getParameter("interreason"))) {
-					db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);
-					response.sendRedirect("Home.jsp");
-				}else {
-					// request.setAttribute("name", "value");
-					request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
-				}
-				db.destroyConnection();
+	 			db.createConnection();
+	 			if(Validation.checkInjection(request.getParameter("interreason"))) {
+	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("interreason"), null);
+	 				response.sendRedirect("Home.jsp");
+	 			}else {
+	 				// request.setAttribute("name", "value");
+	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
+	 			}
+	 			db.destroyConnection();
 			}
 			else
 				response.sendRedirect("Error.jsp");

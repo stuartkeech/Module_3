@@ -50,7 +50,7 @@ public class Validation {
 	public static boolean checkInjection(String inp) {
 		int One = inp.indexOf('=');
 		int Two = inp.indexOf('\"');
-		if(One >= 0 || Two >= 0) {
+		if((One >= 0 || Two >= 0 )|| inp.equals("")) {
 			return false;
 		}else {
 			return true;
