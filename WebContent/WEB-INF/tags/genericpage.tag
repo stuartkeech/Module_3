@@ -54,6 +54,9 @@
 		                	<a href="PolicyApproval.jsp">Review Policies</a>
 		                </li>
 		            <%}%>
+		            <li>
+		            	<a href="Login.jsp" class="fa-logout fa-fw">Logout</a>
+		            </li>
 		         <%}%>
             </ul>
         </nav>
