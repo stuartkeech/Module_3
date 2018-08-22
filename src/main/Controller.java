@@ -15,6 +15,7 @@ import javax.servlet.annotation.MultipartConfig;
 
 import javax.servlet.http.Part;
 @WebServlet("/Controller")
+@MultipartConfig
 public class Controller extends HttpServlet {	
 	private Database db=new Database();
 	@SuppressWarnings("null")
