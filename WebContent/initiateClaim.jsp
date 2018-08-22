@@ -8,6 +8,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script type="text/javascript">
+var role = "<%=session.getAttribute("role")%>";
+var check = "<%=session.getAttribute("fail")%>";
 $(function(){
 	$('#claimReason').change(function(){
 		$('.reason').hide();
@@ -18,18 +20,17 @@ $(function(){
 var a = null;
 $(document).ready(function() 
 { 
-
-if(String(session.getAttribute("managerPower")) != null){
-	$('.cusIDinput').hide();
-	$('#customerIDinput'.val()).show();
+if(role != "policyHolder"){
+	$(".cusIDinput").hide();
+	$("#customerIDinput").show();
 }
 	
-if(session.getAttribute("fail") == null){
+if(check == null){
 		
 }else{
-	if(String(session.getAttribute("fail")) == "fail"){
+	if(String(check) == "fail"){
 		alert("Your Policy has not Matured yet");
-		session.removeAttribute("fail");
+		<%session.removeAttribute("fail");%>
 	}
 }	
 	
