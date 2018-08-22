@@ -31,7 +31,6 @@
 				<th scope="col">Status</th>
 				<th scope="col">Manager ID</th>
 				<th scope="col">Reason for Claim</th>
-				<th scope="col">Reason for Rejection</th>
 			</tr>
 		</thead>
 		<tr>
@@ -40,7 +39,6 @@
 			<td><% out.println(specificClaim.getApproved()); %></td>
 			<td><% out.println(specificClaim.getManagerId()); %></td>
 			<td><% out.println(specificClaim.getReasonForClaim()); %></td>
-			<td><% out.println(specificClaim.getReasonForRejection()); %></td>
 		</tr>
 	</table>
 	
