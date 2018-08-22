@@ -25,7 +25,7 @@ session.setAttribute("DBout",DBout);
 						<td><c:out value="${item[0]}"></c:out></td>
 						<td><c:out value="${item[1]}"></c:out></td>
 						<td><c:out value="${item[2]}"></c:out></td>
-						<td><button name="info" value=<c:out value="${item[3]}"/>>MoreInformation</button></td>
+						<td><button name="info" value=<c:out value="${item[3]}"/>>More Information</button></td>
 					</tr>
 				</c:forEach>
 			</table>
