@@ -7,6 +7,7 @@
 
 <c:set var="body">
 	<%
+	try{
 	if(session.getAttribute("role")==null||!(session.getAttribute("role").equals("manager") ||session.getAttribute("role").equals("admin")) ) {
 		response.sendRedirect("Error.jsp");
 	}
@@ -85,6 +86,8 @@
 		<input type="submit" name="policyAction" value="Go back">
 		<input type="hidden" name="hidden" value="Policy">
 	</form>
+	<% }catch(Exception e){
+	}%>
 </c:set>
 
 <t:genericpage>
