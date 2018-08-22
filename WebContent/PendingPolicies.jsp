@@ -10,13 +10,15 @@ session.setAttribute("DBout",DBout);
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
 		<form action="Controller" name="policyReview" method="post">
-			<table>
-				<tr>
-					<td>Policy ID</td>
-					<td>Policy Name</td>
-					<td>Customer ID</td>
-
-				</tr>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Policy ID</th>
+						<th scope="col">Policy Name</th>
+						<th scope="col">Customer ID</th>
+						<th scope="col"></th>
+					</tr>	
+				</thead>
 				
 				<c:forEach items="${DBout}" var="item">
 					<tr>

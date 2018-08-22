@@ -11,13 +11,15 @@ session.setAttribute("DBout",DBout);
 <div id="main-body">
 
 		<form action="Controller" name="policyClosings" method="post">
-			<table>
-				<tr>
-					<td>User ID</td>
-					<td>Policy ID</td>
-					<td>Claim Amount</td>
-
-				</tr>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">User ID</th>
+						<th scope="col">Policy ID</th>
+						<th scope="col">Claim Amount</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
 				<c:forEach items="${DBout}" var="item">
 					<tr>
 						<td><c:out value="${item[0]}"></c:out></td>

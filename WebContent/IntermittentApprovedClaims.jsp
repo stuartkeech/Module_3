@@ -16,18 +16,20 @@
 	<div id="main-body">
 
 		<form action="Controller" name="policyClosings" method="post">
-			<table>
+			<table class="table table-striped">
+			<thead>
 				<tr>
-					<td>User ID</td>
-					<td>Policy ID</td>
-					<td>Eligible Amount</td>
+					<th scope="col">User ID</th>
+					<th scope="col">Policy ID</th>
+					<th scope="col">Eligible Amount</th>
 				</tr>
+			</thead>
 				<c:forEach items="${DBout}" var="item">
-					<tr>
-						<td><c:out value="${item[0]}"></c:out></td>
-						<td><c:out value="${item[1]}"></c:out></td>
-						<td><c:out value="${item[2]}"></c:out></td>
-					</tr>
+				<tr>
+					<td><c:out value="${item[0]}"></c:out></td>
+					<td><c:out value="${item[1]}"></c:out></td>
+					<td><c:out value="${item[2]}"></c:out></td>
+				</tr>
 				</c:forEach>
 			</table>
 		</form>
