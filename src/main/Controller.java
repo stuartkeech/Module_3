@@ -92,17 +92,17 @@ public class Controller extends HttpServlet {
 		}else if(ref.equals("PolicyApproval")) {
 			if(request.getParameter("info").equals("Pending")) {
 				db.createConnection();
-				s.setAttribute("policies",db.getPolicies(null));
+				s.setAttribute("Policies",db.getPolicies(null));
 				db.destroyConnection();
 				response.sendRedirect("PendingPolicies.jsp");
 			} else if(request.getParameter("info").equals("Approved")) {
 				db.createConnection();
-				s.setAttribute("policies",db.getPolicies(1));
+				s.setAttribute("Policies",db.getPolicies(1));
 				db.destroyConnection();
 				response.sendRedirect("NonPendingPolicies.jsp");
 			} else if(request.getParameter("info").equals("Rejected")){
 				db.createConnection();
-				s.setAttribute("policies",db.getPolicies(0));
+				s.setAttribute("Policies",db.getPolicies(0));
 				db.destroyConnection();
 				response.sendRedirect("NonPendingPolicies.jsp");
 			}
