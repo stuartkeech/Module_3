@@ -7,37 +7,31 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"	type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
+<script type="text/javascript">
+$(function(){
+	$('#claimReason').change(function(){
+		$('.reason').hide();
+		$('#' + $(this).val()).show();	
+	});
+});
+
+var a = null;
+$(document).ready(function() 
+{ 
+
 if(String(session.getAttribute("managerPower")) != null){
 	$('.cusIDinput').hide();
 	$('#customerIDinput'.val()).show();
 }
-</script>
-
-<script>
-if(session.getAttribute("fail") == null){
 	
+if(session.getAttribute("fail") == null){
+		
 }else{
 	if(String(session.getAttribute("fail")) == "fail"){
 		alert("Your Policy has not Matured yet");
 		session.removeAttribute("fail");
 	}
-}
-</script>
-
-<script>
-$(function(){
-	$('#claimReason').change(function(){
-		$('.reason').hide();
-		$('#' + $(this).val()).show();	
-		});
-	});
-</script>
-
-<script type="text/javascript">
-var a = null;
-$(document).ready(function() 
-{ 
+}	
 	
 $.ajax({
     type: "get",
