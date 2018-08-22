@@ -1,49 +1,56 @@
+/**
+ * Validates input from initiate claim form
+ * @Chin Han Chen
+ * @1.0.0
+ * @Validation
+ * @2018/08/16
+ * @Recently put checkDate into Database Class
+ * @Reviewed by Chin Han Chen & pending
+ */
+
 package main;
 import java.io.*;
 import javax.imageio.*;
 import java.util.Date;
-import java.text.*;
 import java.sql.*;
 import java.time.*;
+import javax.activation.MimetypesFileTypeMap;
 
 public class Validation {
 	public static Connection con = null;
 	public static Statement st = null;
 	public static ResultSet rs = null;
 	
-	public static boolean checkImage(String inp) {
+	/**
+	 * 
+	 * @param <String><check the url for uploaded image>
+	 * @return <boolean><true if upload file is image, false if not>
+	 * @exception doesn't throw exception
+	 * @since
+	 * @see
+	 */
+	
+	public static boolean checkImage(InputStream inp) {
 		try {
-			ImageIO.read(new File(inp)).toString();
+			ImageIO.read(inp).toString();
 			return true;
 		}catch(Exception e) {
 			return false;
 		}
 	}
 	
-	public static boolean checkDate(String polmID) throws Exception{
-		double temp1 = 0;
-		Date temp2 = new Date();
-		String dr = "oracle.jdbc.driver.OracleDriver";
-		Class.forName(dr);
-		con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","tcs12345");
-		st = con.createStatement();
-		rs = st.executeQuery("select Policies.tenure, PolicyMap.start_date "+
-		"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID");
-		while(rs.next()) {
-			temp1 = rs.getDouble(1);
-			temp2 = new Date(rs.getDate(1).getTime());
-		}
-		rs.close();
-		st.close();
-		con.close();
-		LocalDate date1 = temp2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return(Period.between(date1,LocalDate.now()).getYears() >= temp1);
-	}
-	
+	/**
+	 * 
+	 * @param <String><the reason for rejecting policy>
+	 * @return <boolean><return true if no invalid characters in input, false otherwise>
+	 * @throws
+	 * @since
+	 * @see
+	 */
 	public static boolean checkInjection(String inp) {
-		int one = inp.indexOf('=');
-		int two = inp.indexOf('\"');
-		if(one > 0 || two >0) {
+		int One = inp.indexOf('=');
+		int Two = inp.indexOf('\"');
+		if(One >= 0 || Two >= 0) {
 			return false;
 		}else {
 			return true;

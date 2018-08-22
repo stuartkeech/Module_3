@@ -8,7 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+
+
+import javax.servlet.http.Part;
 
 
 //The DAO class is responsible for retrieving data from the database. 
@@ -415,6 +423,226 @@ public class Database {
 		int sMonths=sDate.getMonth();
 		return 12*(cYears-sYears)+(cMonths-sMonths);
 	}
+	// created by Chin Han Chen on 2018/08/16
+	public boolean checkDate(String polmID){
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			double temp1 = 0;
+			Date temp2 = new Date();
+			st = connection.createStatement();
+			rs = st.executeQuery("select Policies.tenure, PolicyMap.start_date "+
+					"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID where policy_map_ID = "+polmID);
+			while(rs.next()) {
+				temp1 = rs.getDouble(1);
+				temp2 = new Date(rs.getDate(2).getTime());
+			}
+			rs.close();
+			st.close();
+			LocalDate date1 = temp2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			return(Period.between(date1,LocalDate.now()).getYears() >= temp1);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
+	// insert Claim into Claims Table
+	// created by Chin Han Chen on 2018/08/16
+	public void inputData(int inp2,java.util.Date inp3, String inp5, String inp6, String inp7, Part filePart){
+		try {
+			java.sql.Date sqlDate = new java.sql.Date(inp3.getTime());  
+			PreparedStatement pr = null;
+			pr = connection.prepareStatement("insert into Claims values((select NVL(max(claim_id)+1,1) from Claims),?,?,null,?,?,?,?)");
+			pr.setInt(1, inp2);
+			pr.setDate(2,sqlDate);
+			pr.setObject(3, inp5);
+			pr.setString(4, inp6);
+			pr.setString(5, inp7);
+			if(filePart != null) {
+				InputStream is = filePart.getInputStream();
+				ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+				int nRead;
+				byte[] data = new byte[16384];
+				while((nRead = is.read(data,0,data.length))!=-1) {
+					buffer.write(data,0,nRead);
+				}
+				buffer.flush();
+				byte[] filecontents = buffer.toByteArray();
+				Blob b = connection.createBlob();
+				b.setBytes(1, filecontents);
+				pr.setBlob(6, b);
+			}else {
+				pr.setBlob(6, (Blob)null);
+			}
+			pr.executeUpdate();
+			pr.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	// check if claim person is the same as policy holder
+	// created by Chin Han Chen on 2018/08/17
+	public boolean checkOwner(String inp, String poliMid){
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			String temp = null;
+			st = connection.createStatement();
+			rs = st.executeQuery("select customer_ID from PolicyMap where policy_map_ID = "+poliMid);
+			while(rs.next()) {
+				temp = rs.getObject(1).toString();
+			}
+			rs.close();
+			st.close();
+			return(inp.equals(temp));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
+	// get managerID and PolicyMapID from database
+	// created by Chin Han Chen on 2018/08/17
+	public String[] getIDs(String inp){
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			String temp = null;
+			st = connection.createStatement();
+			rs = st.executeQuery("select Claims.manager_id, PolicyMap.policy_map_id "+
+					"from Claims inner join PolicyMap on Claims.policy_map_id = PolicyMap.policy_map_id where customer_ID = "+inp);
+			while(rs.next()) {
+				temp = rs.getObject(1).toString();
+				temp += " ";
+				temp += rs.getObject(2).toString();
+			}
+			rs.close();
+			st.close();
+			return(temp.split(" "));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// crosscheck the nominee is same as claimer after policy owner dies
+	// created by Chin Han Chen on 2018/08/17
+	public String[] checkNominee(String poliMid){
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			String temp = "";
+			st = connection.createStatement();
+			rs = st.executeQuery("select * from Nominees inner join NomineeMap on Nominees.nominee_id = NomineeMap.nominee_id where policy_map_ID = "+ poliMid);
+			while(rs.next()) {
+				temp = rs.getObject(1).toString();
+				temp += " ";
+			}
+			rs.close();
+			st.close();
+			return(temp.split(" "));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// get all policy_id using customer_ID
+	// created by Chin Han Chen on 2018/08/20
+	public String[] getPolicyId(String cusid){
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			String temp = "";
+			st = connection.createStatement();
+			rs = st.executeQuery("select policy_id from PolicyMap where customer_ID = "+cusid);
+			while(rs.next()) {
+				temp += rs.getObject(1).toString();
+				temp += " ";
+			}
+			rs.close();
+			st.close();
+			return(temp.split(" "));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// get all policy_map_id using customer_ID
+	// created by Chin Han Chen on 2018/08/20
+	public int getPolicyMapId(String polid, String cusid){
+		int temp=0;
+		try {
+			Statement st = null;
+			ResultSet rs = null;
+			st = connection.createStatement();
+			rs = st.executeQuery("select policy_map_id from PolicyMap where (policy_id = "+polid+" and customer_id = "+cusid+")");
+			while(rs.next()) {
+				temp = rs.getInt(1);
+			}
+			rs.close();
+			st.close();
+			return(temp);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return(temp);
+	}
+
+	// get policy mature date
+	// created by Chin Han Chen on 2018/21/2018
+	public String getMatureDate(String polid, String cusid) {
+		try {
+			int polMid = this.getPolicyMapId(polid, cusid);
+			Statement st = null;
+			ResultSet rs = null;
+			double temp1 = 0;
+			Date temp2 = new Date();
+			st = connection.createStatement();
+			rs = st.executeQuery("select Policies.tenure, PolicyMap.start_date "+
+					"from Policies inner join PolicyMap on Policies.policy_id = PolicyMap.policy_ID where policy_map_ID = "+polMid);
+			while(rs.next()) {
+				temp1 = rs.getDouble(1);
+				temp2 = new Date(rs.getDate(2).getTime());
+			}
+			rs.close();
+			st.close();
+			LocalDate date1 = temp2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			return(date1.plusYears((long)temp1).toString());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// get json of all data that need to be updated
+	// created by Chin Han Chen on 2018/08/21
+	public String getInfoJson(String cusid) {
+		String json_array = null;
+		try {
+			json_array = "{\"polData\":[";
+			Statement st = null;
+			ResultSet rs = null;
+			st = connection.createStatement();
+			rs = st.executeQuery("select PolicyMap.policy_id, Policies.policy_name, nominees.name "+
+					"from policymap "+
+					"left join policies on policymap.policy_id = policies.policy_id "+
+					"left join Nomineemap on policymap.policy_map_id = Nomineemap.policy_map_id "+
+					"left join nominees on nomineemap.nominee_id = Nominees.nominee_id "+
+					"where policymap.customer_id = "+cusid);
+			while(rs.next()) {
+				String temp = Integer.toString(rs.getInt(1));
+				json_array += "{\"policyID\":\""+temp+"\", \"policyNM\":\""+rs.getString(2)+"\", \"Nominee\":\""
+						+rs.getString(3)+"\", \"MatureDate\":\""+this.getMatureDate(temp, cusid)+"\"},";
+			}
+			st.close();
+			rs.close();
+			return(json_array.substring(0,json_array.length()-1)+"]}");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return(json_array);
+	}
 }

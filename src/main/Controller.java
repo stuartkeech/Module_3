@@ -9,10 +9,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 
+import javax.servlet.annotation.MultipartConfig;
+
+import javax.servlet.http.Part;
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {	
 	private Database db=new Database();
+	@SuppressWarnings("null")
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// The block that auto updates the sites info
+		HttpSession s=request.getSession();
+		String userName = request.getParameter("CustomerID");
+		if(userName == null || !"True".equals(userName)) {
+			response.setContentType("text/plain");
+			response.getWriter().write("");
+		}else {
+			response.setContentType("application/Json");
+			db.createConnection();
+			response.getWriter().write(db.getInfoJson(s.getAttribute("id").toString()));
+			db.destroyConnection();
+		}
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("POST");
 		HttpSession s=request.getSession();
@@ -189,32 +208,79 @@ public class Controller extends HttpServlet {
 			}
 		}
 		// module for inserting reason for rejection into PolicyMap Table 
- 		// created by Chin Han Chen on 2018/08/16
+		// created by Chin Han Chen on 2018/08/16
 		else if(ref.equals("ClaimRejection")) {
- 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
- 				db.createConnection();
- 				db.claimRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificClaimId") + ""));
- 				db.claimRejectionStatus(0,Integer.parseInt(s.getAttribute("specificClaimId") + ""));
- 				db.destroyConnection();
- 				response.sendRedirect("RegularClosing.jsp");
- 			}else {
- 				request.setAttribute("fail", "fail");
- 				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
- 				dis1.include(request, response);
- 			}
- 		}
+			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+				db.createConnection();
+				db.claimRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificClaimId") + ""));
+				db.claimRejectionStatus(0,Integer.parseInt(s.getAttribute("specificClaimId") + ""));
+				db.destroyConnection();
+				response.sendRedirect("RegularClosing.jsp");
+			}else {
+				request.setAttribute("fail", "fail");
+				RequestDispatcher dis1 = request.getRequestDispatcher("/ClaimRejection.jsp");
+				dis1.include(request, response);
+			}
+		}
 		else if(ref.equals("PolicyRejection")) {
- 			if(Validation.checkInjection(request.getParameter("Rejection"))) {
- 				db.createConnection();
- 				db.policyRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
- 				db.policyRejectionStatus(0,Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
- 				db.destroyConnection();
- 				response.sendRedirect("PolicyApproval.jsp");
- 			}else {
- 				request.setAttribute("fail", "fail");
- 				RequestDispatcher dis1 = request.getRequestDispatcher("/PolicyRejection.jsp");
- 				dis1.include(request, response);
- 			}
- 		}
+			if(Validation.checkInjection(request.getParameter("Rejection"))) {
+				db.createConnection();
+				db.policyRejectionReason(request.getParameter("Rejection"),Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
+				db.policyRejectionStatus(0,Integer.parseInt(s.getAttribute("specificPolicyMapId") + ""));
+				db.destroyConnection();
+				response.sendRedirect("PolicyApproval.jsp");
+			}else {
+				request.setAttribute("fail", "fail");
+				RequestDispatcher dis1 = request.getRequestDispatcher("/PolicyRejection.jsp");
+				dis1.include(request, response);
+			}
+		}else if(ref.equals("initiateClaim")) {
+
+			db.createConnection();
+			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
+			db.destroyConnection();
+			String manid = null;
+			String c_reason = request.getParameter("claimReason");
+
+			// if the reason for claim is death of policy holder
+			if(c_reason.equals("policyholderDeath")) {
+				// success
+				Part filePart = request.getPart("deathcert");
+				db.createConnection();
+				if(Validation.checkImage(filePart.getInputStream())) {
+					db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
+					response.sendRedirect("Home.jsp");
+				}else {
+					request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
+				}
+				db.destroyConnection();
+
+				// if the claim reason is maturing of policy
+			}else if(c_reason.equals("maturedPolicy")) {
+				// success
+				db.createConnection();
+				if(db.checkDate(Integer.toString(polMid))) {
+					db.inputData(polMid,new java.util.Date(),manid, c_reason, null, null);
+					response.sendRedirect("Home.jsp");
+				}else {
+					//request.getRequestDispatcher("/initiateClaim.jsp").forward(request, response);
+					response.sendRedirect("initiateClaim.jsp");
+				}
+				db.destroyConnection();
+
+				// if the claim reason is intermitten claims
+			}else if(c_reason.equals("intermittentClaim")) {
+				// success
+				db.createConnection();
+				if(Validation.checkInjection(request.getParameter("interreason"))) {
+					db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);
+					response.sendRedirect("Home.jsp");
+				}else {
+					// request.setAttribute("name", "value");
+					request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
+				}
+				db.destroyConnection();
+			}
+		}
 	}
 }
