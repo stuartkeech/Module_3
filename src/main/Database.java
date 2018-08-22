@@ -403,7 +403,7 @@ public class Database {
 			double SA=policy.getSumAssured();
 			double tenure=policy.getTenure();
 			double completed=dateSub(new Date(map.getStartDate().getTime()));
-			out[i]= ((SA/tenure)*completed)-(0.04*SA+2000);
+			out[i]= (double)(Math.round((((SA/tenure)*completed)-(0.04*SA+2000)) * 100)) / 100.0;
 		}
 		return out;
 	}
