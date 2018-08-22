@@ -11,19 +11,37 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-			$(function(){
-		        $('#claimReason').change(function(){
-		            $('.reason').hide();
-		            $('#' + $(this).val()).show();
-		        });
-		    });
+if(String(session.getAttribute("managerPower")) != null){
+	$('.cusIDinput').hide();
+	$('#customerIDinput'.val()).show();
+}
+</script>
+
+<script>
+if(session.getAttribute("fail") == null){
+	
+}else{
+	if(String(session.getAttribute("fail")) == "fail"){
+		alert("Your Policy has not Matured yet");
+		session.removeAttribute("fail");
+	}
+}
+</script>
+
+<script>
+$(function(){
+	$('#claimReason').change(function(){
+		$('.reason').hide();
+		$('#' + $(this).val()).show();	
+		});
+	});
 </script>
 
 <script type="text/javascript">
 var a = null;
 $(document).ready(function() 
 { 
-
+	
 $.ajax({
     type: "get",
     url:"Controller",
@@ -35,7 +53,7 @@ $.ajax({
     	a = data.polData;
         $.each(data.polData,function(i,obj)
         {
-         var div_data="<option value="+obj.policyID+">"+obj.policyNM+"</option>";
+         var div_data="<option value="+obj.PolicyMID+">"+obj.policyNM+"</option>";
         $(div_data).appendTo('#policyName'); 
         });  
         },
@@ -48,14 +66,15 @@ $.ajax({
 
 $(function(){
     $('#policyName').change(function(){
-    	console.log(a);
+    	var nom = "";
     	$.each(a,function(i,obj)
             {
-    		if($('#policyName').val() == String(obj.policyID)){
-        		$('#nominee').val(obj.Nominee);
+    		if($('#policyName').val() == String(obj.PolicyMID)){
+        		nom = nom +String(obj.Nominee)+ ", " ;
         		$('#matureDate').val(obj.MatureDate);
         	}
-            })
+            });
+    	$('#nominee').val(nom.slice(0,-1));
     	
     });
 });
@@ -68,6 +87,13 @@ $(function(){
 <br><br><br><br><br>
 <div id="main-body">
 		<form action="Controller" id="initiateClaim" method="post" enctype="multipart/form-data">
+			
+			<div id="customerIDinput" class="cusIDinput" style="display:none">
+				<label for="customerIDinput">Input CustomerID</label>
+		    	<input type="text" name="customerIDinput">
+		    </div>		
+		
+		
 			<label for="policyName">
 				Select Policy
 			</label>
