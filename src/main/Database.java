@@ -102,7 +102,6 @@ public class Database {
 		try {
 			result.close();
 			statement.close();
-			connection.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,7 +151,6 @@ public class Database {
 		try {
 			result.close();
 			statement.close();
-			connection.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,6 +174,7 @@ public class Database {
 		ResultSet result = null;
 
 		try {
+			System.out.println(connection.isClosed());
 			String query = "SELECT * FROM Claims WHERE claim_id = ?";
 			System.out.println(claim_id);
 			statement = connection.prepareStatement(query);
