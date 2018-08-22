@@ -35,7 +35,7 @@ $.ajax({
     	a = data.polData;
         $.each(data.polData,function(i,obj)
         {
-         var div_data="<option value="+obj.policyID+">"+obj.policyNM+"</option>";
+         var div_data="<option value="+obj.PolicyMID+">"+obj.policyNM+"</option>";
         $(div_data).appendTo('#policyName'); 
         });  
         },
@@ -48,14 +48,15 @@ $.ajax({
 
 $(function(){
     $('#policyName').change(function(){
-    	console.log(a);
+    	var nom = "";
     	$.each(a,function(i,obj)
             {
-    		if($('#policyName').val() == String(obj.policyID)){
-        		$('#nominee').val(obj.Nominee);
+    		if($('#policyName').val() == String(obj.PolicyMID)){
+        		nom = nom +String(obj.Nominee)+ ", " ;
         		$('#matureDate').val(obj.MatureDate);
         	}
-            })
+            });
+    	$('#nominee').val(nom.slice(0,-1));
     	
     });
 });

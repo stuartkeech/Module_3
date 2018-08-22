@@ -469,16 +469,16 @@ public Customer getCustomerByCustomerId(int customer_id) {
     		Statement st = null;
         	ResultSet rs = null;
         	st = connection.createStatement();
-        	rs = st.executeQuery("select PolicyMap.policy_id, Policies.policy_name, nominees.name "+
+        	rs = st.executeQuery("select PolicyMap.policy_id, Policies.policy_name, nominees.name , PolicyMap.policy_map_id "+
         			"from policymap "+
         			"left join policies on policymap.policy_id = policies.policy_id "+
         			"left join Nomineemap on policymap.policy_map_id = Nomineemap.policy_map_id "+
         			"left join nominees on nomineemap.nominee_id = Nominees.nominee_id "+
         			"where policymap.customer_id = "+cusid);
         	while(rs.next()) {
-        		String temp = Integer.toString(rs.getInt(1));
-        		json_array += "{\"policyID\":\""+temp+"\", \"policyNM\":\""+rs.getString(2)+"\", \"Nominee\":\""
-        		+rs.getString(3)+"\", \"MatureDate\":\""+this.getMatureDate(temp, cusid)+"\"},";
+        		String temp = Integer.toString(rs.getInt(4));
+        		json_array += "{\"policyID\":\""+Integer.toString(rs.getInt(1))+"\", \"policyNM\":\""+rs.getString(2)+"\", \"Nominee\":\""
+        		+rs.getString(3)+"\", \"MatureDate\":\""+this.getMatureDate(temp, cusid)+"\", \"PolicyMID\":\""+temp+"\"},";
         	}
         	st.close();
         	rs.close();

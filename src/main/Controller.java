@@ -48,9 +48,7 @@ public class Controller extends HttpServlet {
 		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
 			
-			db.createConnection();
-			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
-			db.destroyConnection();
+			int polMid = Integer.parseInt(request.getParameter("policyName"));
 			String manid = null;
 			String c_reason = request.getParameter("claimReason");
 			
@@ -148,16 +146,7 @@ public class Controller extends HttpServlet {
 			String button = request.getParameter("loginButton");			
 			if(button.equals("Login as Policy Holder")) {
 				s.setAttribute("role", "policyHolder");
-				s.setAttribute("id", 3);
-				try {
-					db.createConnection();
-					s.setAttribute("policies", db.getPolicyId(s.getAttribute("id").toString()));
-					db.destroyConnection();
-				}catch(Exception e) {
-					s.setAttribute("policies", null);
-				}
-				db.createConnection();
-				db.destroyConnection();
+				s.setAttribute("id", 2);
 				response.sendRedirect("Home.jsp");				
 			}else if(button.equals("Login as Manager")) {
 				s.setAttribute("role", "manager");
