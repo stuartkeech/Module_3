@@ -23,9 +23,12 @@ public class Controller extends HttpServlet {
 		// The block that auto updates the sites info
 		HttpSession s=request.getSession();
 		String userName = request.getParameter("CustomerID");
-		if(userName == null || !"True".equals(userName)) {
-			response.setContentType("text/plain");
-			response.getWriter().write("");
+		//System.out.println(userName);
+		if(userName == null || !"False".equals(userName)) {
+			response.setContentType("application/Json");
+			db.createConnection();
+			response.getWriter().write(db.getInfoJson(userName));
+			db.destroyConnection();
 		}else {
 			response.setContentType("application/Json");
 			db.createConnection();
@@ -111,7 +114,7 @@ public class Controller extends HttpServlet {
 			String button = request.getParameter("loginButton");			
 			if(button.equals("Login as Policy Holder")) {
 				s.setAttribute("role", "policyHolder");
-				s.setAttribute("id", 1);
+				s.setAttribute("id", 2);
 				response.sendRedirect("Home.jsp");				
 			}else if(button.equals("Login as Manager")) {
 				s.setAttribute("role", "manager");
