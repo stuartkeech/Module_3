@@ -3,7 +3,7 @@
 <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-String[][] DBout=(String[][])session.getAttribute("policies");
+String[][] DBout=(String[][])session.getAttribute("Policies");
 session.setAttribute("DBout",DBout);
 %>
 <t:genericpage>
@@ -29,6 +29,3 @@ session.setAttribute("DBout",DBout);
 		</form>
 	</div>
 </t:genericpage>
-
-
-
