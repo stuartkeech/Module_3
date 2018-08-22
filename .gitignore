@@ -2,3 +2,4 @@ build/*
 !build/build.xml
 /build/
 .classpath
+/.metadata/

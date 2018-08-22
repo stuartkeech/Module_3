@@ -41,8 +41,6 @@
 		</div>
 	</div>	
 </div>		
-			Please put all the content/Information here
-
 </t:genericpage>
 
 <script>
