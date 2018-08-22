@@ -51,14 +51,13 @@ public class Controller extends HttpServlet {
 			int polMid = Integer.parseInt(request.getParameter("policyName"));
 			String manid = null;
 			String c_reason = request.getParameter("claimReason");
-			
 			// if the reason for claim is death of policy holder
 			if(c_reason.equals("policyholderDeath")) {
 				// success
 				Part filePart = request.getPart("deathcert");
 	 			db.createConnection();
 	 			if(Validation.checkImage(filePart.getInputStream())) {
-	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, filePart);
+	 				db.inputData(polMid,new java.util.Date(),manid, null, filePart);
 	 				response.sendRedirect("Home.jsp");
 	 			}else {
 	 				request.getRequestDispatcher("initiateClaim.jsp").forward(request, response);
@@ -70,10 +69,11 @@ public class Controller extends HttpServlet {
 				// success
 	 			db.createConnection();
 	 			if(db.checkDate(Integer.toString(polMid))) {
-	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, null, null);
+	 				db.inputData(polMid,new java.util.Date(),manid, null, null);
 	 				response.sendRedirect("Home.jsp");
 	 			}else {
 	 				//request.getRequestDispatcher("/initiateClaim.jsp").forward(request, response);
+	 				s.setAttribute("fail", "fail");
 	 				response.sendRedirect("initiateClaim.jsp");
 	 			}
 	 			db.destroyConnection();
@@ -83,7 +83,7 @@ public class Controller extends HttpServlet {
 				// success
 	 			db.createConnection();
 	 			if(Validation.checkInjection(request.getParameter("interreason"))) {
-	 				db.inputData(polMid,new java.util.Date(),manid, c_reason, request.getParameter("interreason"), null);
+	 				db.inputData(polMid,new java.util.Date(),manid, request.getParameter("interreason"), null);
 	 				response.sendRedirect("Home.jsp");
 	 			}else {
 	 				// request.setAttribute("name", "value");

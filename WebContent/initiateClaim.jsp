@@ -11,19 +11,25 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-			$(function(){
-		        $('#claimReason').change(function(){
-		            $('.reason').hide();
-		            $('#' + $(this).val()).show();
-		        });
-		    });
+$(function(){
+	$('#claimReason').change(function(){
+		$('.reason').hide();
+		$('#' + $(this).val()).show();	
+		});
+	});
+</script>
+<script>
+if(String(session.getAttribute("fail")) == "fail"){
+	alert("Your Policy has not Matured yet");
+	session.removeAttribute("fail");
+}	
 </script>
 
 <script type="text/javascript">
 var a = null;
 $(document).ready(function() 
 { 
-
+	
 $.ajax({
     type: "get",
     url:"Controller",

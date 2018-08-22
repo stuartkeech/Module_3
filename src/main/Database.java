@@ -259,16 +259,15 @@ public Customer getCustomerByCustomerId(int customer_id) {
     
     // insert Claim into Claims Table
     // created by Chin Han Chen on 2018/08/16
-    public void inputData(int inp2,java.util.Date inp3, String inp5, String inp6, String inp7, Part filePart){
+    public void inputData(int inp2,java.util.Date inp3, String inp5, String inp7, Part filePart){
     	try {
     		java.sql.Date sqlDate = new java.sql.Date(inp3.getTime());  
         	PreparedStatement pr = null;
-    		pr = connection.prepareStatement("insert into Claims values((select NVL(max(claim_id)+1,1) from Claims),?,?,null,?,?,?,?)");
+    		pr = connection.prepareStatement("insert into Claims values((select NVL(max(claim_id)+1,1) from Claims),?,?,null,?,?,null,?)");
     		pr.setInt(1, inp2);
     		pr.setDate(2,sqlDate);
     		pr.setObject(3, inp5);
-    		pr.setString(4, inp6);
-    		pr.setString(5, inp7);
+    		pr.setString(4, inp7);
     		if(filePart != null) {
     			InputStream is = filePart.getInputStream();
     			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
