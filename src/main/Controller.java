@@ -33,17 +33,22 @@ public class Controller extends HttpServlet {
 		
 		// is request comes from the initiate claim page
 		if(ref.equals("initiateClaim")) {
+			
 			// The block that auto updates the sites info
-			/*
-			String userName = request.getParameter("policyName");
-			if(userName == null || "".equals(userName)) {
+			String userName = request.getParameter("CustomerID");
+			if(userName == null || !"True".equals(userName)) {
+				System.out.println("there is something here!!");
 				response.setContentType("text/plain");
 				response.getWriter().write("");
 			}else {
-				response.setContentType("text/plain");
-				response.getWriter().write(userName);
+				System.out.println("there is something here!!");
+				response.setContentType("application/Json");
+				db.createConnection();
+				response.getWriter().write(db.getInfoJson(s.getAttribute("id").toString()));
+				db.destroyConnection();
 			}
-			*/
+			
+			
 			db.createConnection();
 			int polMid = db.getPolicyMapId(request.getParameter("policyName"),s.getAttribute("id").toString());
 			db.destroyConnection();
@@ -152,6 +157,9 @@ public class Controller extends HttpServlet {
 				}catch(Exception e) {
 					s.setAttribute("policies", null);
 				}
+				db.createConnection();
+				System.out.println(db.getInfoJson(s.getAttribute("id").toString()));
+				db.destroyConnection();
 				response.sendRedirect("Home.jsp");				
 			}else if(button.equals("Login as Manager")) {
 				s.setAttribute("role", "manager");

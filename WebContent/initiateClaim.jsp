@@ -13,7 +13,7 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
     	<!-- Created by Chin Han Chen on 2018/08/20 -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     	<script>
-			$(function() {
+			$(function(){
 		        $('#claimReason').change(function(){
 		            $('.reason').hide();
 		            $('#' + $(this).val()).show();
@@ -21,8 +21,35 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 		    });
 		</script>
 		
-		
+		<!-- This part is added to make the policy info dynamic -->
+    	<!-- Created by Chin Han Chen on 2018/08/20 -->
+    	<script src="https://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		$(document).ready(function() 
+			{ 
+			$('#id_trial').click(function() {
+				$.ajax({
+			        type: "POST",
+			        url:"/Module_3/Controller",
+			        data:{"CustomerID":"True"},
+			        dataType: "json",
+			        success: function (data) {
+			            $.each(data.polData,function(i,obj)
+			            {
+			             var div_data="<option value="+obj.policyID+">"+obj.policyNM+"</option>";
+			            $(div_data).appendTo('#policyName'); 
+			            });  
+			            },
+			            error: function(xhr, status, error) {
+			                // check status && error
+			                alert(error);
+			             },
+			      });
+			    });
+			});
+		</script>
 	</head>
+	
 	<!-- This is where to put your main content. -->
 	<div id="main-body">
 		<form action="Controller" id="initiateClaim" method="post" enctype="multipart/form-data">
@@ -30,22 +57,9 @@ request.setAttribute("policylist", (String[])session.getAttribute("policies"));
 				Select Policy
 			</label>
    			<select name="policyName" id="policyName">
-   			<!-- Use ajax to make asynchronous request to populate option -->
-   				<c:choose>
-				    <c:when test="${policylist !=null}">
-				    	<option value=null>Choose Policy From Below</option>
-				    	<c:forEach items="${policylist}" var="item">
-				        	<option <c:out value="${policies}" />>${item}</option>
-				        </c:forEach>
-				    </c:when>    
-				    <c:otherwise>
-				        <option value=null>No Polices</option>
-				    </c:otherwise>
-				</c:choose>
+   				<option>Please Choose From Below Options</option>
    			</select>
-   			
- 			<strong>Ajax Response</strong>
- 			<div id="testAjax"></div>
+   			<input type="button" id="id_trial" name="btn_trial" value="Trial Button..">
    			
    			<!-- Use jQuery to make hidden divs visible by using ID -->
    			<div id="policyInfoDiv">

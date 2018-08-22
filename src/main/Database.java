@@ -460,5 +460,34 @@ public Customer getCustomerByCustomerId(int customer_id) {
     	return null;
     }
     
+    // get json of all data that need to be updated
+    // created by Chin Han Chen on 2018/08/21
+    public String getInfoJson(String cusid) {
+    	String json_array = null;
+    	try {
+    		json_array = "{\"polData\":[";
+    		Statement st = null;
+        	ResultSet rs = null;
+        	st = connection.createStatement();
+        	rs = st.executeQuery("select PolicyMap.policy_id, Policies.policy_name, nominees.name "+
+        			"from policymap "+
+        			"left join policies on policymap.policy_id = policies.policy_id "+
+        			"left join Nomineemap on policymap.policy_map_id = Nomineemap.policy_map_id "+
+        			"left join nominees on nomineemap.nominee_id = Nominees.nominee_id "+
+        			"where policymap.customer_id = "+cusid);
+        	while(rs.next()) {
+        		String temp = Integer.toString(rs.getInt(1));
+        		json_array += "{\"policyID\":\""+temp+"\", \"policyNM\":\""+rs.getString(2)+"\", \"Nominee\":\""
+        		+rs.getString(3)+"\", \"MatureDate\":\""+this.getMatureDate(temp, cusid)+"\"},";
+        	}
+        	st.close();
+        	rs.close();
+        	return(json_array.substring(0,json_array.length()-1)+"]}");
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return(json_array);
+    }
+    
  
 }
