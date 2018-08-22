@@ -7,6 +7,10 @@
 
 <c:set var="body">
 	<%
+	if(session.getAttribute("role")==null||!(session.getAttribute("role").equals("manager") ||session.getAttribute("role").equals("admin")) ) {
+		response.sendRedirect("Error.jsp");
+	}
+	
 	Customer specificCustomer = (Customer) session.getAttribute("specificCustomer");
 	Policy specificPolicy = (Policy) session.getAttribute("specificPolicy");
 	PolicyMap specificPolicyMap = (PolicyMap) session.getAttribute("specificPolicyMap");

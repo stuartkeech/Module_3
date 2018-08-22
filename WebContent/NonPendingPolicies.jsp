@@ -5,6 +5,10 @@
 <%
 String[][] DBout=(String[][])session.getAttribute("Policies");
 session.setAttribute("DBout",DBout);
+
+if(session.getAttribute("role")==null||!(session.getAttribute("role").equals("manager") ||session.getAttribute("role").equals("admin")) ) {
+	response.sendRedirect("Error.jsp");
+}
 %>
 <t:genericpage>
 	<!-- This is where to put your main content. -->

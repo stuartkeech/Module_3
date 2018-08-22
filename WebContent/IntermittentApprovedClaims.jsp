@@ -3,6 +3,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
+	if(session.getAttribute("role")==null||!(session.getAttribute("role").equals("manager") ||session.getAttribute("role").equals("admin")) ) {
+		response.sendRedirect("Error.jsp");
+	}
 	String[][] DBout=(String[][])session.getAttribute("claims");
 	
 	double[] arr = (double[])session.getAttribute("EA");

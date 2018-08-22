@@ -8,6 +8,9 @@
 
 <c:set var="body">
 	<%
+	if(session.getAttribute("role")==null||!(session.getAttribute("role").equals("manager") ||session.getAttribute("role").equals("admin")) ) {
+		response.sendRedirect("Error.jsp");
+	}
 	Claim specificClaim = (Claim) session.getAttribute("specificClaim");
 	Customer specificCustomer = (Customer) session.getAttribute("specificCustomer");
 	Policy specificPolicy = (Policy) session.getAttribute("specificPolicy");
@@ -23,7 +26,7 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="text-center" class="text-cetner" colspan="6">Claim Information</th>
+				<th class="text-center" class="text-center" colspan="6">Claim Information</th>
 			</tr>
 			<tr>
 				<th scope="col">Claim Id</th>

@@ -282,6 +282,8 @@ public class Controller extends HttpServlet {
 				}
 				db.destroyConnection();
 			}
+			else
+				response.sendRedirect("Error.jsp");
 		}
 	}
 }
